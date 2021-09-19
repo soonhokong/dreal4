@@ -23,7 +23,7 @@ IBEX_VERSION=2.7.4
 
 clang-tidy "$@" -header-filter="$(realpath .)" -system-headers=0 -p ./ \
            -- \
-           -std=c++14 \
+           -std=c++17 \
            -I./ \
            -x c++ \
            -I bazel-genfiles \
@@ -45,7 +45,6 @@ clang-tidy "$@" -header-filter="$(realpath .)" -system-headers=0 -p ./ \
            -isystem "${BAZEL_EXTERNAL}/pybind11/include" \
            -isystem "${BAZEL_EXTERNAL}/spdlog/include" \
            -isystem "${BAZEL_THIRD_PARTY}/com_github_robotlocomotion_drake" \
-           -isystem "${BAZEL_THIRD_PARTY}/com_github_tartanllama_optional" \
            -isystem "${BAZEL_THIRD_PARTY}/com_github_progschj_threadpool" \
            -isystem "${BAZEL_THIRD_PARTY}/com_github_pinam45_dynamic_bitset" \
            -isystem /usr/local/include \

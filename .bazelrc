@@ -1,9 +1,9 @@
 # Import any user defined rules.
 try-import %workspace%/user.bazelrc
 
-# Add C++14 compiler flags.
-build --cxxopt=-std=c++14
-build --host_cxxopt=-std=c++14
+# Add C++17 compiler flags.
+build --cxxopt=-std=c++17
+build --host_cxxopt=-std=c++17
 
 # Default to an optimized build.
 build -c opt

@@ -52,7 +52,6 @@ cc_library(
     includes = [
         "third_party/com_github_pinam45_dynamic_bitset",
         "third_party/com_github_robotlocomotion_drake",
-        "third_party/com_github_tartanllama_optional",
     ],
     visibility = [
         "//dreal:__subpackages__",
