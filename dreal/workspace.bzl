@@ -75,6 +75,14 @@ def dreal_workspace():
     )
 
     github_archive(
+        name = "cadical",  # MIT
+        build_file = str(Label("//tools:cadical.BUILD.bazel")),
+        commit = "rel-1.5.2",
+        repository = "arminbiere/cadical",
+        sha256 = "4a4251bf0191677ca8cda275cb7bf5e0cf074ae0056819642d5a7e5c1a952e6e",
+    )
+
+    github_archive(
         name = "pybind11",  # BSD
         build_file = str(Label("//tools:pybind11.BUILD.bazel")),
         commit = "v2.9.1",

@@ -93,6 +93,15 @@ dreal_cc_googletest(
     ],
 )
 
+dreal_cc_googletest(
+    name = "cadical_test",
+    srcs = ["cadical_test.cc"],
+    tags = ["extlib"],
+    deps = [
+        "@cadical",
+    ],
+)
+
 cc_test(
     name = "spdlog_test",
     size = "small",
