@@ -93,9 +93,9 @@ def dreal_workspace():
 
     github_archive(
         name = "com_google_absl",  # BSD
-        commit = "20230125.1",
+        commit = "20230125.2",
         repository = "abseil/abseil-cpp",
-        sha256 = "81311c17599b3712069ded20cca09a62ab0bf2a89dfa16993786c8782b7ed145",
+        sha256 = "9a2b5752d7bfade0bdeee2701de17c9480620f8b237e1964c1b9967c75374906",
     )
 
     github_archive(
