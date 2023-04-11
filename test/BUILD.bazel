@@ -100,6 +100,15 @@ dreal_cc_googletest(
 )
 
 dreal_cc_googletest(
+    name = "libtorch_test",
+    srcs = ["libtorch_test.cc"],
+    tags = ["extlib"],
+    deps = [
+        "@libtorch_cpu//:libtorch",
+    ],
+)
+
+dreal_cc_googletest(
     name = "nlopt_test",
     srcs = ["nlopt_test.cc"],
     tags = ["extlib"],

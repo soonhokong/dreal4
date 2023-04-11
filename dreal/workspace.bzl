@@ -112,3 +112,11 @@ def dreal_workspace():
         repository = "nlohmann/json",
         sha256 = "dfb6ec5af1feeb9ce7efa1554676335ca9dde5f60424642c8ac2f9e0a66da909",
     )
+
+    http_archive(
+        name = "libtorch_cpu",
+        build_file = "@//tools:libtorch.BUILD.bazel",
+        sha256 = "2d67cff381186f2a01140348d2da7ab35d2e526c5703f4a8312c9428bef6df88",
+        strip_prefix = "libtorch",
+        urls = ["https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip"],
+    )
