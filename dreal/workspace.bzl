@@ -61,7 +61,7 @@ def dreal_workspace():
 
     github_archive(
         name = "spdlog",  # MIT
-        build_file = str(Label("//tools:spdlog.BUILD.bazel")),
+        build_file = "@//tools:spdlog.BUILD.bazel",
         commit = "v1.11.0",
         repository = "gabime/spdlog",
         sha256 = "ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb",
@@ -69,7 +69,7 @@ def dreal_workspace():
 
     github_archive(
         name = "fmt",  # MIT
-        build_file = str(Label("//tools:fmt.BUILD.bazel")),
+        build_file = "@//tools:fmt.BUILD.bazel",
         commit = "9.1.0",
         repository = "fmtlib/fmt",
         sha256 = "5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2",
@@ -77,7 +77,7 @@ def dreal_workspace():
 
     github_archive(
         name = "picosat",  # MIT
-        build_file = str(Label("//tools:picosat.BUILD.bazel")),
+        build_file = "@//tools:picosat.BUILD.bazel",
         commit = "ee542566ca89717af1b4558b0b3f226eb3b6b42d",  # v965 + custom fix
         repository = "dreal-deps/picosat",
         sha256 = "9a047b7ba3ac1075a2288d35045585e2e3c24961f078f30ad97a313b8e539eb2",
@@ -85,8 +85,8 @@ def dreal_workspace():
 
     github_archive(
         name = "pybind11",  # BSD
-        build_file = str(Label("//tools:pybind11.BUILD.bazel")),
         commit = "v2.10.2",
+        build_file = "@//tools:pybind11.BUILD.bazel",
         repository = "pybind/pybind11",
         sha256 = "93bd1e625e43e03028a3ea7389bba5d3f9f2596abc074b068e70f4ef9b1314ae",
     )
@@ -100,7 +100,7 @@ def dreal_workspace():
 
     github_archive(
         name = "cds",  # BSL 1.0
-        build_file = str(Label("//tools:cds.BUILD.bazel")),
+        build_file = "@//tools:cds.BUILD.bazel",
         commit = "v2.3.3",
         repository = "khizmax/libcds",
         sha256 = "f090380ecd6b63a3c2b2f0bdb27260de2ccb22486ef7f47cc1175b70c6e4e388",
