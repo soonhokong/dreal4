@@ -1,5 +1,6 @@
 /*
    Copyright 2017 Toyota Research Institute
+   Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,7 +18,10 @@
 
 #include <ostream>
 
+#include <torch/script.h>
+
 #include "dreal/solver/brancher.h"
+#include "dreal/solver/brancher_gnn.h"
 #include "dreal/util/box.h"
 #include "dreal/util/dynamic_bitset.h"
 #include "dreal/util/option_value.h"
@@ -33,8 +37,9 @@ class Config {
   Config& operator=(Config&&) = default;
   ~Config() = default;
 
-  using Brancher = std::function<int(
-      const Box& box, const DynamicBitset& bitset, Box* left, Box* right)>;
+  using Brancher =
+      std::function<int(const Box& box, const DynamicBitset& bitset, Box* left,
+                        Box* right, void*)>;
 
   /// Returns the precision option.
   double precision() const;
@@ -93,6 +98,9 @@ class Config {
   /// Returns a mutable OptionValue for 'stack_left_box_first'.
   OptionValue<bool>& mutable_stack_left_box_first();
 
+  /// Returns if GNN-based branching heuristic is on or off.
+  bool is_gnn_branching() const { return branching_graph().is_initialized(); }
+
   /// Returns the brancher.
   const Brancher& brancher() const;
 
@@ -149,6 +157,18 @@ class Config {
 
   /// Returns a mutable OptionValue for `random_seed`.
   OptionValue<uint32_t>& mutable_random_seed();
+
+  /// Returns the branching model (PyTorch model).
+  const torch::jit::Module& branching_model() const;
+
+  /// Returns a mutable OptionValue for `branching_model`.
+  OptionValue<torch::jit::Module>& mutable_branching_model();
+
+  /// Returns the branching graph.
+  const BranchGraphDefinition& branching_graph() const;
+
+  /// Returns a mutable OptionValue for `branching_graph`.
+  OptionValue<BranchGraphDefinition>& mutable_branching_graph();
 
   /// Returns if it's smtlib2_compliant mode.
   bool smtlib2_compliant() const;
@@ -224,6 +244,12 @@ class Config {
 
   // Seed for Random Number Generator.
   OptionValue<uint32_t> random_seed_{0};
+
+  // PyTorch model that we will use in the branching unit.
+  OptionValue<torch::jit::Module> branching_model_{torch::jit::Module()};
+
+  // Graph definition that we will use in the branching unit.
+  OptionValue<BranchGraphDefinition> branching_graph_{BranchGraphDefinition{}};
 
   // Brancher to use. By default it uses `BranchLargestFirst`.
   OptionValue<Brancher> brancher_{BranchLargestFirst};

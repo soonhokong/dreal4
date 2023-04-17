@@ -41,7 +41,7 @@ pair<double, int> FindMaxDiam(const Box& box, const DynamicBitset& active_set) {
 }
 
 int BranchLargestFirst(const Box& box, const DynamicBitset& active_set,
-                       Box* const left, Box* const right) {
+                       Box* const left, Box* const right, void*) {
   DREAL_ASSERT(!active_set.none());
 
   const pair<double, int> max_diam_and_idx{FindMaxDiam(box, active_set)};

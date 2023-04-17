@@ -1,5 +1,6 @@
 /*
    Copyright 2017 Toyota Research Institute
+   Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -33,7 +34,7 @@ IcpSeq::IcpSeq(const Config& config) : Icp{config} {}
 
 bool IcpSeq::CheckSat(const Contractor& contractor,
                       const vector<FormulaEvaluator>& formula_evaluators,
-                      ContractorStatus* const cs) {
+                      void* extra_info, ContractorStatus* const cs) {
   // Use the stacking policy set by the configuration.
   stack_left_box_first_ = config().stack_left_box_first();
   static IcpStat stat{DREAL_LOG_INFO_ENABLED};
@@ -115,7 +116,7 @@ bool IcpSeq::CheckSat(const Contractor& contractor,
     Box box_left;
     Box box_right;
     const int branching_dim = config().brancher()(
-        current_box, *evaluation_result, &box_left, &box_right);
+        current_box, *evaluation_result, &box_left, &box_right, extra_info);
     if (branching_dim >= 0) {
       if (stack_left_box_first_) {
         stack.emplace_back(box_left, branching_dim);
