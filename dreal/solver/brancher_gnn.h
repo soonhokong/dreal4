@@ -61,11 +61,11 @@ BranchTheoryLiteralPattern ExtractPattern(const Formula& f);
 
 struct BranchInferenceInput {
  public:
-  BranchInferenceInput(const torch::jit::Module& m,
+  BranchInferenceInput(torch::jit::Module* const m,
                        const BranchGraphDefinition& g)
-      : model{m}, graph_def{g} {}
+      : module{m}, graph_def{g} {}
 
-  const torch::jit::Module& model;
+  torch::jit::Module* module;
 
   const BranchGraphDefinition& graph_def;
 

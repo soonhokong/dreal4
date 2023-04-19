@@ -439,7 +439,8 @@ void MainProgram::ExtractOptions() {
     opt_.get("--branching-model")->getString(branching_model_filename);
     try {
       config_.mutable_branching_model().set_from_command_line(
-          torch::jit::load(branching_model_filename));
+          std::make_shared<torch::jit::Module>(
+              torch::jit::load(branching_model_filename)));
       config_.mutable_brancher().set_from_command_line(BranchGnn);
     } catch (const c10::Error& e) {
       std::cerr << "error loading the model\n";

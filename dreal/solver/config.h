@@ -159,10 +159,10 @@ class Config {
   OptionValue<uint32_t>& mutable_random_seed();
 
   /// Returns the branching model (PyTorch model).
-  const torch::jit::Module& branching_model() const;
+  torch::jit::Module* branching_model() const;
 
   /// Returns a mutable OptionValue for `branching_model`.
-  OptionValue<torch::jit::Module>& mutable_branching_model();
+  OptionValue<std::shared_ptr<torch::jit::Module>>& mutable_branching_model();
 
   /// Returns the branching graph.
   const BranchGraphDefinition& branching_graph() const;
@@ -246,7 +246,7 @@ class Config {
   OptionValue<uint32_t> random_seed_{0};
 
   // PyTorch model that we will use in the branching unit.
-  OptionValue<torch::jit::Module> branching_model_{torch::jit::Module()};
+  OptionValue<std::shared_ptr<torch::jit::Module>> branching_model_{nullptr};
 
   // Graph definition that we will use in the branching unit.
   OptionValue<BranchGraphDefinition> branching_graph_{BranchGraphDefinition{}};

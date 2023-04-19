@@ -123,11 +123,12 @@ uint32_t Config::random_seed() const { return random_seed_.get(); }
 
 OptionValue<uint32_t>& Config::mutable_random_seed() { return random_seed_; }
 
-const torch::jit::Module& Config::branching_model() const {
-  return branching_model_.get();
+torch::jit::Module* Config::branching_model() const {
+  return branching_model_.get().get();
 }
 
-OptionValue<torch::jit::Module>& Config::mutable_branching_model() {
+OptionValue<std::shared_ptr<torch::jit::Module>>&
+Config::mutable_branching_model() {
   return branching_model_;
 }
 
