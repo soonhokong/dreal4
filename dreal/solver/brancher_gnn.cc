@@ -26,6 +26,8 @@
 #include <nlohmann/json.hpp>
 #include <torch/torch.h>
 
+#include <typeinfo>
+
 #include "dreal/solver/brancher.h"
 #include "dreal/util/assert.h"
 #include "dreal/util/logging.h"
@@ -116,19 +118,17 @@ int BranchGnn(const Box& box, const DynamicBitset& active_set, Box* const left,
     info.var_node_ubs[var_id] = intv_i.ub();
   }
 
-  torch::jit::IValue var_mask{};
-  torch::jit::IValue edge_mask{};
-  torch::jit::IValue var_node_lbs{};
-  torch::jit::IValue var_node_ubs{};
-  torch::jit::IValue cst_node_args{};
-  std::unordered_map<std::string, torch::jit::IValue> umap = {
-      {"var_mask", var_mask},           {"edge_mask", edge_mask},
-      {"var_node_lbs", var_node_lbs},   {"var_node_ubs", var_node_ubs},
-      {"cst_node_args", cst_node_args},
-  };
+   std::unordered_map<std::string, torch::jit::IValue> umap = {
+       {"var_mask", torch::jit::IValue(info.var_mask.data())},
+       {"edge_mask", torch::jit::IValue(info.edge_mask.data())},
+       {"var_node_lbs", torch::jit::IValue(info.var_node_lbs.data())},
+       {"var_node_ubs", torch::jit::IValue(info.var_node_ubs.data())},
+       {"cst_node_args", torch::jit::IValue(info.cst_node_args.data())},
+   };
 
-  auto output = info.module->forward({}, umap);
+  auto output = info.model->forward({}, umap);
 
+  // We will also need the var2id map here for translation.
   // interpret output...
   (void)(left);
   (void)(right);
