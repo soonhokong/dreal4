@@ -45,6 +45,7 @@ class BranchGraphDefinition {
   std::unordered_map<std::string, std::vector<int>> cst2edges;
   int num_vars{-1};
   int num_edges{-1};
+  int num_csts{-1};
   int max_n_args{-1};
 };
 
