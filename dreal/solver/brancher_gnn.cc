@@ -45,6 +45,7 @@ BranchGraphDefinition::BranchGraphDefinition(const string& filename) {
   for (const auto& item : json["var2id"].items()) {
     const int id{item.value().get<int>()};
     var2id.emplace(item.key(), id);
+    id2var.emplace(id, item.key());
     num_vars = std::max(num_vars, id + 1);
   }
 
@@ -126,13 +127,57 @@ int BranchGnn(const Box& box, const DynamicBitset& active_set, Box* const left,
        {"cst_node_args", torch::jit::IValue(info.cst_node_args.data())},
    };
 
-  auto output = info.model->forward({}, umap);
+  torch::jit::IValue output = info.module->forward({}, umap);
 
-  // We will also need the var2id map here for translation.
-  // interpret output...
+  bool tuple_output = output.isTuple();
+  torch::Tensor log_probs, peak;
+  // direction denotes the search order. O = left first, 1 = right first
+  int action, direction = 0;
+  float split_value = 0.5;
+
+  if(tuple_output){
+    auto list_res = output.toTuple();
+    // We don't really care the low/high parameters if split value is
+    // the maximum-likelihood value.
+    // torch::Tensor low = list_res->elements()[0].toTensor();
+    // torch::Tensor high = list_res->elements()[2].toTensor();
+    peak = list_res->elements()[1].toTensor().squeeze();
+    log_probs = list_res->elements()[3].toTensor().squeeze();
+  } else {
+    log_probs = output.toTensor();
+  }
+
+  int argmax_idx = log_probs.argmax().item<long>();
+  int n_action = log_probs.sizes()[0];
+
+  if(tuple_output){split_value = peak.index({argmax_idx}).item<float>();}
+
+  if(n_action == 5){
+      action = argmax_idx;
+    }
+    else{
+      action = argmax_idx / 2;
+      direction = argmax_idx % 2;
+    }
+
+    std::cout << "Final action is " << action << std::endl;
+    std::cout << "Final direction is " << direction << std::endl;
+    std::cout << "Split value is  " << split_value << std::endl;
+
+  // now interpret the action. The action above is indexed base on graph-def
+  // but we need to return node index based on current box
+  std::cout << info.graph_def.id2var.at(action) << std::endl;
+  std::string node_name = info.graph_def.id2var.at(action);
+  int split_dim = -1;
+  for (int i = 0; i < box.size(); ++i) {
+    const Variable& var_i{box.variable(i)};
+    if(var_i.to_string() == node_name){split_dim=i; break;}
+  }
+
+  std::cout << "Split at " << split_dim << "dimension in the box" << std::endl;
+
   (void)(left);
   (void)(right);
-
   return -1;
 }
 }  // namespace dreal

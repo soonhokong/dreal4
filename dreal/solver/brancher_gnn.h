@@ -40,6 +40,7 @@ class BranchGraphDefinition {
   bool is_initialized() const { return max_n_args != -1; }
 
   std::unordered_map<std::string, int> var2id;
+  std::unordered_map<int, std::string> id2var;
   std::unordered_map<std::string, int> cst2id;
   std::unordered_map<std::string, std::vector<int>> cst2edges;
   int num_vars{-1};
