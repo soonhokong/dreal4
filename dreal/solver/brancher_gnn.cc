@@ -201,45 +201,25 @@ int BranchGnn(const Box& box, const DynamicBitset& active_set, Box* const left,
     return -1;
   }
 
-  //std::cerr << "Split at " << split_dim << "dimension in the box" << std::endl;
-
   // Create left and right box here:
-  if (split_value == 0.5){
-    pair<Box, Box> bisected_boxes{box.bisect(branching_dim)};
-    if (left_first){
-      *left = std::move(bisected_boxes.first);
-      *right = std::move(bisected_boxes.second);
-    }
-    else{
-      *right = std::move(bisected_boxes.first);
-      *left = std::move(bisected_boxes.second);
-    }
-    DREAL_LOG_DEBUG(
-        "Branch {}\n"
-        "on {}\n"
-        "Box1=\n{}\n"
-        "Box2=\n{}",
-        box, box.variable(branching_dim), *left, *right);
-    return branching_dim;
+  //  std::cout << "\nbranching dim :" << branching_dim <<
+  //  "\nLeft first:" << left_first << "\n Split ratio: " << split_value << std::endl;
+  pair<Box, Box> bisected_boxes{box.bisect(branching_dim, split_value)};
+  if (left_first){
+    *left = std::move(bisected_boxes.first);
+    *right = std::move(bisected_boxes.second);
   }
   else{
-    // How do we create boxes splitting not at median?
-    // two cases need to be handled here: predict dimension + value; predict dimension + value + direction;
-    // so the skeleton should be
-//    pair<Box, Box> bisected_boxes{box.bisect(branching_dim, value)};
-//    if (left_first){
-//      *left = std::move(bisected_boxes.first);
-//      *right = std::move(bisected_boxes.second);
-//    }
-//    else{
-//      *right = std::move(bisected_boxes.first);
-//      *left = std::move(bisected_boxes.second);
-//    }
-
-    (void)(left);
-    (void)(right);
-     return -1;
+    *right = std::move(bisected_boxes.first);
+    *left = std::move(bisected_boxes.second);
   }
+  DREAL_LOG_DEBUG(
+      "Branch {}\n"
+      "on {}\n"
+      "Box1=\n{}\n"
+      "Box2=\n{}",
+      box, box.variable(branching_dim), *left, *right);
+  return branching_dim;
 
 }
 
