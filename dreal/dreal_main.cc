@@ -31,6 +31,7 @@
 #include "dreal/util/exception.h"
 #include "dreal/util/filesystem.h"
 #include "dreal/util/logging.h"
+#include <torch/csrc/jit/runtime/graph_executor.h>
 
 namespace dreal {
 
@@ -438,9 +439,13 @@ void MainProgram::ExtractOptions() {
     string branching_model_filename;
     opt_.get("--branching-model")->getString(branching_model_filename);
     try {
+      // the next line will make the first inference call to the model faster
+      // (maybe 10x), at the cost of remaining calls will be slower (1.5x).
+      torch::jit::setGraphExecutorOptimize(false);
       config_.mutable_branching_model().set_from_command_line(
           std::make_shared<torch::jit::Module>(
               torch::jit::load(branching_model_filename)));
+
       config_.mutable_brancher().set_from_command_line(BranchGnn);
     } catch (const c10::Error& e) {
       std::cerr << "error loading the model\n";
