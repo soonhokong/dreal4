@@ -40,10 +40,12 @@ class BranchGraphDefinition {
   bool is_initialized() const { return max_n_args != -1; }
 
   std::unordered_map<std::string, int> var2id;
+  std::unordered_map<int, std::string> id2var;
   std::unordered_map<std::string, int> cst2id;
   std::unordered_map<std::string, std::vector<int>> cst2edges;
   int num_vars{-1};
   int num_edges{-1};
+  int num_csts{-1};
   int max_n_args{-1};
 };
 
@@ -68,23 +70,15 @@ struct BranchInferenceInput {
   torch::jit::Module* module;
 
   const BranchGraphDefinition& graph_def;
+  torch::Tensor var_mask, edge_mask, var_node_ubs, var_node_lbs, cst_node_args;
 
   // var_mask[i] = 1 iff i-th variable is used in this theory problem.
-  std::vector<int> var_mask;
-
   // edge_mask_[i] = 1 iff i-th edge is used in this theory problem.
-  std::vector<int> edge_mask;
-
   // var_node_lbs_[i] is the lower bound of i-th variable in this theory
   // problem.
-  std::vector<double> var_node_lbs;
-
   // var_node_ubs_[i] is the upper bound of i-th variable in this theory
   // problem.
-  std::vector<double> var_node_ubs;
-
   // cst_node_args_[i] includes the parameters for i-th constraint.
-  std::vector<std::vector<double>> cst_node_args;
 };
 
 /// Performs the branching operation using the trained PyTorch model.
