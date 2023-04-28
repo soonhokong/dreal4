@@ -22,6 +22,8 @@
 #include <utility>
 
 #include <nlohmann/json.hpp>
+#include <torch/torch.h>
+
 
 #include "dreal/contractor/contractor_forall.h"
 #include "dreal/solver/brancher_gnn.h"
@@ -42,6 +44,7 @@ using std::make_unique;
 using std::numeric_limits;
 using std::set;
 using std::vector;
+using namespace torch::indexing;
 
 TheorySolver::TheorySolver(const Config& config)
     : config_{config}, icp_{nullptr} {
@@ -141,26 +144,30 @@ void UpdateInferenceInput(const BranchGraphDefinition& graph_def,
                           const Box& box, const vector<Formula>& assertions,
                           BranchInferenceInput* branch_inference_input) {
   // 1. Update var_mask.
-  branch_inference_input->var_mask.resize(graph_def.num_vars);
+//  branch_inference_input->var_mask.resize(graph_def.num_vars);
+  branch_inference_input->var_mask = torch::full({1, graph_def.num_vars}, false);
   for (int i = 0; i < box.size(); ++i) {
     const Variable& var_i{box.variable(i)};
     const int var_id{graph_def.var2id.at(var_i.get_name())};
-    branch_inference_input->var_mask[var_id] = 1;
+    branch_inference_input->var_mask.index_put_({0, var_id}, true);
   }
 
   // 2. Update edge_mask and cst_node_args;
-  branch_inference_input->edge_mask.resize(graph_def.num_edges);
-  branch_inference_input->cst_node_args.resize(
-      graph_def.num_edges, vector<double>(graph_def.max_n_args));
+//  branch_inference_input->edge_mask.resize(graph_def.num_edges);
+//  branch_inference_input->cst_node_args.resize(
+//      graph_def.num_edges, vector<double>(graph_def.max_n_args));
+  branch_inference_input->edge_mask = torch::full({1, graph_def.num_edges}, false);
+  branch_inference_input->cst_node_args = torch::zeros(
+    {1, graph_def.num_csts, graph_def.max_n_args});
   for (const Formula& f : assertions) {
     const BranchTheoryLiteralPattern p{ExtractPattern(f)};
     const int cst_id{graph_def.cst2id.at(p.pattern)};
     const vector<int> edges{graph_def.cst2edges.at(p.pattern)};
     for (const int edge : edges) {
-      branch_inference_input->edge_mask[edge] = 1;
+      branch_inference_input->edge_mask.index_put_({0, edge}, true);
     }
     for (int i = 0; i < static_cast<int>(p.parameters.size()); ++i) {
-      branch_inference_input->cst_node_args[cst_id][i] = p.parameters[i];
+      branch_inference_input->cst_node_args.index_put_({0, cst_id, i}, p.parameters[i]);
     }
   }
 }

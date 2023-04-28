@@ -38,6 +38,8 @@ namespace dreal {
 using std::pair;
 using std::string;
 using std::vector;
+using namespace torch::indexing;
+
 
 BranchGraphDefinition::BranchGraphDefinition(const string& filename) {
   std::ifstream ifs(filename);
@@ -111,45 +113,45 @@ int BranchGnn(const Box& box, const DynamicBitset& active_set, Box* const left,
 
   BranchInferenceInput& info{*(static_cast<BranchInferenceInput*>(extra_info))};
 
-  info.var_node_lbs.resize(info.graph_def.num_vars);
-  info.var_node_ubs.resize(info.graph_def.num_vars);
+  info.var_node_lbs = torch::zeros({1, info.graph_def.num_vars});
+  info.var_node_ubs = torch::zeros({1, info.graph_def.num_vars});
   for (int i = 0; i < box.size(); ++i) {
     const Variable& var_i{box.variable(i)};
     const int var_id{info.graph_def.var2id.at(var_i.to_string())};
     const Box::Interval& intv_i{box[i]};
-    info.var_node_lbs[var_id] = intv_i.lb();
-    info.var_node_ubs[var_id] = intv_i.ub();
+    info.var_node_lbs.index_put_({0, var_id}, intv_i.lb());
+    info.var_node_ubs.index_put_({0, var_id}, intv_i.ub());
   }  
 
-  auto float_opts = torch::TensorOptions().dtype(torch::kFloat32);
-  auto bool_opts = torch::TensorOptions().dtype(torch::kBool);
+//  auto float_opts = torch::TensorOptions().dtype(torch::kFloat32);
+//  auto bool_opts = torch::TensorOptions().dtype(torch::kBool);
 
-  torch::Tensor var_mask, edge_mask, var_node_lbs, var_node_ubs, cst_node_args;
-  var_mask = torch::from_blob(
-    info.var_mask.data(), {1, info.graph_def.num_vars}, bool_opts);
-
-  edge_mask = torch::from_blob(
-    info.edge_mask.data(), {1, info.graph_def.num_edges}, bool_opts);
-
-  var_node_lbs = torch::from_blob(
-    info.var_node_lbs.data(), {1, info.graph_def.num_vars},
-    float_opts);
-
-  var_node_ubs = torch::from_blob(
-    info.var_node_ubs.data(), {1, info.graph_def.num_vars},
-    float_opts);
-
-  cst_node_args = torch::from_blob(
-    info.cst_node_args.data(),
-    {1, info.graph_def.num_csts, info.graph_def.max_n_args},
-    float_opts);
+//  torch::Tensor edge_mask, var_node_lbs, var_node_ubs, cst_node_args;
+////  var_mask = torch::from_blob(
+////    info.var_mask.data(), {1, info.graph_def.num_vars}, bool_opts);
+//
+//  edge_mask = torch::from_blob(
+//    info.edge_mask.data(), {1, info.graph_def.num_edges}, bool_opts);
+//
+//  var_node_lbs = torch::from_blob(
+//    info.var_node_lbs.data(), {1, info.graph_def.num_vars},
+//    float_opts);
+//
+//  var_node_ubs = torch::from_blob(
+//    info.var_node_ubs.data(), {1, info.graph_def.num_vars},
+//    float_opts);
+//
+//  cst_node_args = torch::from_blob(
+//    info.cst_node_args.data(),
+//    {1, info.graph_def.num_csts, info.graph_def.max_n_args},
+//    float_opts);
 
    std::unordered_map<std::string, torch::jit::IValue> umap = {
-       {"var_mask", torch::jit::IValue(var_mask)},
-       {"edge_mask", torch::jit::IValue(edge_mask)},
-       {"var_node_lbs", torch::jit::IValue(var_node_lbs)},
-       {"var_node_ubs", torch::jit::IValue(var_node_ubs)},
-       {"cst_node_args", torch::jit::IValue(cst_node_args)}
+       {"var_mask", torch::jit::IValue(info.var_mask)},
+       {"edge_mask", torch::jit::IValue(info.edge_mask)},
+       {"var_node_lbs", torch::jit::IValue(info.var_node_lbs)},
+       {"var_node_ubs", torch::jit::IValue(info.var_node_ubs)},
+       {"cst_node_args", torch::jit::IValue(info.cst_node_args)}
    };
 
   auto start = std::chrono::steady_clock::now();
