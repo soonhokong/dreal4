@@ -165,12 +165,13 @@ int BranchGnn(const Box& box, const DynamicBitset& active_set, Box* const left,
 
   if(tuple_output){
     auto list_res = output.toTuple();
-    // We don't really care the low/high parameters if split value is
-    // the maximum-likelihood value.
-    // torch::Tensor low = list_res->elements()[0].toTensor();
-    // torch::Tensor high = list_res->elements()[2].toTensor();
-    peak = list_res->elements()[1].toTensor().squeeze();
-    log_probs = list_res->elements()[3].toTensor().squeeze();
+        if(list_res->elements().size() == 2){ // Gaussian distribution
+            peak = list_res->elements()[0].toTensor().view(-1);
+            log_probs = list_res->elements()[1].toTensor().squeeze();
+        } else { // triangular distribution
+            peak = list_res->elements()[1].toTensor().squeeze();
+            log_probs = list_res->elements()[3].toTensor().squeeze();
+        }
   } else {
     log_probs = output.toTensor();
   }
