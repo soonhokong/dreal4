@@ -40,16 +40,18 @@ class Icp {
   virtual ~Icp() = default;
 
   /// Checks the delta-satisfiability of the current assertions.
+  ///
   /// @param[in] contractor Contractor to use in pruning phase
   /// @param[in] formula_evaluators A vector of FormulaEvaluator which
   ///                               determines when to stop and which
   ///                               dimension to branch.
+  /// @param[in] info Extra information that can be used during CheckSat.
   /// @param[in,out] cs A contractor to be updated.
   /// Returns true  if it's delta-SAT.
   /// Returns false if it's UNSAT.
   virtual bool CheckSat(const Contractor& contractor,
                         const std::vector<FormulaEvaluator>& formula_evaluators,
-                        ContractorStatus* cs) = 0;
+                        void* info, ContractorStatus* cs) = 0;
 
  protected:
   const Config& config() const { return config_; }

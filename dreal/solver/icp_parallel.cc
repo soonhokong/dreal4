@@ -175,7 +175,7 @@ IcpParallel::IcpParallel(const Config& config)
 
 bool IcpParallel::CheckSat(const Contractor& contractor,
                            const vector<FormulaEvaluator>& formula_evaluators,
-                           ContractorStatus* const cs) {
+                           void* /* info */, ContractorStatus* const cs) {
   // Initial Prune
   contractor.Prune(cs);
   if (cs->box().empty()) {

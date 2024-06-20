@@ -1,5 +1,6 @@
 /*
    Copyright 2017 Toyota Research Institute
+   Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -42,6 +43,6 @@ std::pair<double, int> FindMaxDiam(const Box& box,
 ///
 /// @returns the branching dimension if found, otherwise returns -1.
 int BranchLargestFirst(const Box& box, const DynamicBitset& active_set,
-                       Box* left, Box* right);
+                       Box* left, Box* right, void* extra_info);
 
 }  // namespace dreal

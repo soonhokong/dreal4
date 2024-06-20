@@ -24,6 +24,7 @@
 #include <nlohmann/json.hpp>
 
 #include "dreal/contractor/contractor_forall.h"
+#include "dreal/solver/brancher_gnn.h"
 #include "dreal/solver/context.h"
 #include "dreal/solver/filter_assertion.h"
 #include "dreal/solver/formula_evaluator.h"
@@ -134,6 +135,35 @@ class DumpTheoryLiteralsHelper {
   bool enabled_{false};
   nlohmann::json data_;
 };
+
+// Update the output parameer `branch_inference_input`.
+void UpdateInferenceInput(const BranchGraphDefinition& graph_def,
+                          const Box& box, const vector<Formula>& assertions,
+                          BranchInferenceInput* branch_inference_input) {
+  // 1. Update var_mask.
+  branch_inference_input->var_mask.resize(graph_def.num_vars);
+  for (int i = 0; i < box.size(); ++i) {
+    const Variable& var_i{box.variable(i)};
+    const int var_id{graph_def.var2id.at(var_i.get_name())};
+    branch_inference_input->var_mask[var_id] = 1;
+  }
+
+  // 2. Update edge_mask and cst_node_args;
+  branch_inference_input->edge_mask.resize(graph_def.num_edges);
+  branch_inference_input->cst_node_args.resize(
+      graph_def.num_edges, vector<double>(graph_def.max_n_args));
+  for (const Formula& f : assertions) {
+    const BranchTheoryLiteralPattern p{ExtractPattern(f)};
+    const int cst_id{graph_def.cst2id.at(p.pattern)};
+    const vector<int> edges{graph_def.cst2edges.at(p.pattern)};
+    for (const int edge : edges) {
+      branch_inference_input->edge_mask[edge] = 1;
+    }
+    for (int i = 0; i < static_cast<int>(p.parameters.size()); ++i) {
+      branch_inference_input->cst_node_args[cst_id][i] = p.parameters[i];
+    }
+  }
+}
 
 }  // namespace
 
@@ -270,11 +300,23 @@ bool TheorySolver::CheckSat(const Box& box, const vector<Formula>& assertions) {
   ContractorStatus contractor_status(box);
 
   // Icp Step
+  std::unique_ptr<BranchInferenceInput> branch_inference_input;
   const optional<Contractor> contractor{
       BuildContractor(assertions, &contractor_status)};
   if (contractor) {
-    icp_->CheckSat(*contractor, BuildFormulaEvaluator(assertions),
-                   &contractor_status);
+    if (config_.branching_graph().is_initialized()) {
+      branch_inference_input = std::make_unique<BranchInferenceInput>(
+          config_.branching_model(), config_.branching_graph());
+
+      UpdateInferenceInput(config_.branching_graph(), box, assertions,
+                           branch_inference_input.get());
+
+      icp_->CheckSat(*contractor, BuildFormulaEvaluator(assertions),
+                     branch_inference_input.get(), &contractor_status);
+    } else {
+      icp_->CheckSat(*contractor, BuildFormulaEvaluator(assertions), nullptr,
+                     &contractor_status);
+    }
     if (contractor_status.box().empty()) {
       explanation_ = contractor_status.Explanation();
       return false;

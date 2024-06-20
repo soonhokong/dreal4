@@ -1,5 +1,6 @@
 /*
    Copyright 2017 Toyota Research Institute
+   Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@ using std::pair;
 std::vector<Variable> g_branch_variables;
 
 int MyBrancher(const Box& box, const DynamicBitset& bitset, Box* left,
-               Box* right) {
+               Box* right, void*) {
   DREAL_ASSERT(!bitset.none());
 
   const pair<double, int> max_diam_and_idx{FindMaxDiam(box, bitset)};

@@ -26,9 +26,12 @@ dreal_cc_library(
     ],
     deps = [
         ":brancher",
+        ":brancher_gnn",
         "//dreal/util:box",
         "//dreal/util:dynamic_bitset",
         "//dreal/util:option_value",
+        "@json",
+        "@libtorch_cpu//:libtorch",
     ],
 )
 
@@ -40,11 +43,37 @@ dreal_cc_library(
     hdrs = [
         "brancher.h",
     ],
+    visibility = [
+        "//dreal:__pkg__",
+    ],
     deps = [
         "//dreal/util:assert",
         "//dreal/util:box",
         "//dreal/util:dynamic_bitset",
         "//dreal/util:logging",
+    ],
+)
+
+dreal_cc_library(
+    name = "brancher_gnn",
+    srcs = [
+        "brancher_gnn.cc",
+    ],
+    hdrs = [
+        "brancher_gnn.h",
+    ],
+    visibility = [
+        "//dreal:__pkg__",
+    ],
+    deps = [
+        ":brancher",
+        "//dreal/symbolic",
+        "//dreal/util:assert",
+        "//dreal/util:box",
+        "//dreal/util:dynamic_bitset",
+        "//dreal/util:logging",
+        "@json",
+        "@libtorch_cpu//:libtorch",
     ],
 )
 
@@ -102,6 +131,7 @@ dreal_cc_library(
     ],
     deps = [
         ":brancher",
+        ":brancher_gnn",
         ":config",
         ":filter_assertion",
         ":icp_stat",
@@ -175,6 +205,14 @@ dreal_cc_library(
 # -----
 # Tests
 # -----
+
+dreal_cc_googletest(
+    name = "brancher_gnn_test",
+    tags = ["unit"],
+    deps = [
+        ":brancher_gnn",
+    ],
+)
 
 dreal_cc_googletest(
     name = "config_test",
@@ -260,6 +298,7 @@ filegroup(
     name = "headers",
     srcs = [
         "brancher.h",
+        "brancher_gnn.h",
         "config.h",
         "context.h",
         "formula_evaluator.h",

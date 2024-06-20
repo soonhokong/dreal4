@@ -36,7 +36,7 @@ class IcpParallel : public Icp {
 
   bool CheckSat(const Contractor& contractor,
                 const std::vector<FormulaEvaluator>& formula_evaluators,
-                ContractorStatus* cs) override;
+                void* info, ContractorStatus* cs) override;
 
  private:
   ThreadPool pool_;

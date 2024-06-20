@@ -105,7 +105,7 @@ class Box {
 
   /// Bisects the box at @p i -th dimension.
   /// @throws std::runtime if @p i -th dimension is not bisectable.
-  std::pair<Box, Box> bisect(int i) const;
+  std::pair<Box, Box> bisect(int i, const float ratio = 0.5) const;
 
   /// Bisects the box at @p the dimension represented by @p var.
   /// @throws std::runtime if @p i -th dimension is not bisectable.
@@ -125,7 +125,7 @@ class Box {
   /// Bisects the box at @p i -th dimension.
   /// @pre i-th variable is bisectable.
   /// @pre i-th variable is of continuous type.
-  std::pair<Box, Box> bisect_continuous(int i) const;
+  std::pair<Box, Box> bisect_continuous(int i, const float ratio = 0.5) const;
 
   std::shared_ptr<std::vector<Variable>> variables_;
 

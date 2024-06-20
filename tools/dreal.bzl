@@ -146,6 +146,7 @@ def dreal_pybind_library(
         deps = cc_deps + [
             "//:dreal_shared_library",
             "@pybind11",
+            "@libtorch_cpu//:libtorch",
         ],
     )
     native.py_library(

@@ -33,7 +33,7 @@ class IcpSeq : public Icp {
 
   bool CheckSat(const Contractor& contractor,
                 const std::vector<FormulaEvaluator>& formula_evaluators,
-                ContractorStatus* cs) override;
+                void* info, ContractorStatus* cs) override;
 
  private:
   // If `stack_left_box_first_` is true, we add the left box from the
