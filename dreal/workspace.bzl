@@ -25,6 +25,7 @@ def dreal_workspace():
             "/opt/homebrew/opt/ibex@2.7.4/share/pkgconfig",
             # Linux
             "/usr/lib/pkgconfig",
+            "/usr/local/lib/pkgconfig",
             "/opt/libibex/2.7.4/share/pkgconfig",
         ],
     )
@@ -33,6 +34,7 @@ def dreal_workspace():
         modname = "nlopt",
         pkg_config_paths = [
             "/usr/local/opt/nlopt/lib/pkgconfig",
+            "/usr/local/lib64/pkgconfig",
         ],
     )
 
@@ -44,18 +46,17 @@ def dreal_workspace():
 
     http_archive(
         name = "rules_license",
-        sha256 = "6157e1e68378532d0241ecd15d3c45f6e5cfd98fc10846045509fb2a7cc9e381",
+        sha256 = "26d4021f6898e23b82ef953078389dd49ac2b5618ac564ade4ef87cced147b38",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_license/releases/download/0.0.4/rules_license-0.0.4.tar.gz",
+            "https://github.com/bazelbuild/rules_license/releases/download/1.0.0/rules_license-1.0.0.tar.gz",
         ],
     )
 
     http_archive(
         name = "rules_pkg",
-        sha256 = "eea0f59c28a9241156a47d7a8e32db9122f3d50b505fae0f33de6ce4d9b61834",
+        sha256 = "d20c951960ed77cb7b341c2a59488534e494d5ad1d30c4818c736d57772a9fef",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.8.0/rules_pkg-0.8.0.tar.gz",
-            "https://github.com/bazelbuild/rules_pkg/releases/download/0.8.0/rules_pkg-0.8.0.tar.gz",
+            "https://github.com/bazelbuild/rules_pkg/releases/download/1.0.1/rules_pkg-1.0.1.tar.gz",
         ],
     )
 
@@ -93,9 +94,9 @@ def dreal_workspace():
 
     github_archive(
         name = "com_google_absl",  # BSD
-        commit = "20230125.1",
+        commit = "20240722.1",
         repository = "abseil/abseil-cpp",
-        sha256 = "81311c17599b3712069ded20cca09a62ab0bf2a89dfa16993786c8782b7ed145",
+        sha256 = "40cee67604060a7c8794d931538cb55f4d444073e556980c88b6c49bb9b19bb7",
     )
 
     github_archive(
