@@ -7,9 +7,9 @@ common --enable_workspace
 # Use local strategy for tests to avoid sandbox symlink issues with source files
 test --strategy=TestRunner=local
 
-# Add C++14 compiler flags.
-build --cxxopt=-std=c++14
-build --host_cxxopt=-std=c++14
+# Add C++17 compiler flags.
+build --cxxopt=-std=c++17
+build --host_cxxopt=-std=c++17
 
 # Default to an optimized build.
 build -c opt
