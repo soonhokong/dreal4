@@ -19,7 +19,7 @@
 
 int main() {
   // Simply checks if we can have absl containers.
-  { absl::flat_hash_map<int, int> map; }
-  { absl::flat_hash_set<int> set; }
-  { absl::InlinedVector<int, 20> vector; }
+  { [[maybe_unused]] absl::flat_hash_map<int, int> map; }
+  { [[maybe_unused]] absl::flat_hash_set<int> set; }
+  { [[maybe_unused]] absl::InlinedVector<int, 20> vector; }
 }
