@@ -18,11 +18,16 @@
 #include <sstream>
 #include <utility>
 
+#include "dreal/symbolic/symbolic_fmt.h"
 #include "dreal/util/assert.h"
+#include "dreal/util/box_fmt.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/math.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
+
+template <>
+struct fmt::formatter<ibex::NumConstraint> : fmt::ostream_formatter {};
 
 using std::cout;
 using std::make_unique;

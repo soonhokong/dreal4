@@ -80,7 +80,7 @@ class ContractorStat : public Stat {
     if (enabled()) {
       using fmt::print;
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Pruning",
-            "Contractor level", num_prune_);
+            "Contractor level", num_prune_.load());
     }
   }
 

@@ -21,11 +21,15 @@
 #include <limits>
 #include <utility>
 
+#include "dreal/symbolic/symbolic_fmt.h"
 #include "dreal/util/assert.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/math.h"
 #include "dreal/util/precision_guard.h"
+
+template <>
+struct fmt::formatter<ibex::Interval> : fmt::ostream_formatter {};
 
 using std::ceil;
 using std::equal;

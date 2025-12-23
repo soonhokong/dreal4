@@ -18,6 +18,7 @@
 #include <atomic>
 #include <utility>
 
+#include "dreal/symbolic/symbolic_fmt.h"
 #include "dreal/util/assert.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
@@ -45,7 +46,7 @@ class ContractorStatusStat : public Stat {
       using fmt::print;
       print(cout, "{:<45} @ {:<20} = {:>15}\n",
             "Total # of Explanation Generations", "ContractorStatus level",
-            num_explanation_generation_);
+            num_explanation_generation_.load());
       if (num_explanation_generation_) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Explanation Generations",

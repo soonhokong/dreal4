@@ -22,6 +22,7 @@
 #include "dreal/solver/brancher.h"
 #include "dreal/solver/icp_stat.h"
 #include "dreal/util/assert.h"
+#include "dreal/util/box_fmt.h"
 #include "dreal/util/cds.h"
 #include "dreal/util/interrupt.h"
 #include "dreal/util/logging.h"

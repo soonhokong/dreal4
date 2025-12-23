@@ -15,8 +15,8 @@
 */
 #pragma once
 
-#include "fmt/ostream.h"
-#include "spdlog/spdlog.h"
+#include <fmt/ostream.h>
+#include <spdlog/spdlog.h>
 
 namespace dreal {
 

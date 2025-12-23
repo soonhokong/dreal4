@@ -20,6 +20,7 @@
 #include <iostream>
 
 #include <fmt/format.h>
+#include <fmt/ostream.h>
 
 #include "dreal/dr/run.h"
 #include "dreal/smt2/run.h"
@@ -28,6 +29,10 @@
 #include "dreal/util/exception.h"
 #include "dreal/util/filesystem.h"
 #include "dreal/util/logging.h"
+
+template <>
+struct fmt::formatter<dreal::Config::SatDefaultPhase>
+    : fmt::ostream_formatter {};
 
 namespace dreal {
 

@@ -33,6 +33,17 @@
 #include "dreal/solver/context.h"
 #include "dreal/solver/theory_solver.h"
 #include "dreal/symbolic/prefix_printer.h"
+#include "dreal/symbolic/symbolic_fmt.h"
+#include "dreal/util/box_fmt.h"
+
+template <>
+struct fmt::formatter<ibex::Interval> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::Config> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::Contractor> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::DynamicBitset> : fmt::ostream_formatter {};
 #include "dreal/symbolic/symbolic.h"
 #include "dreal/util/box.h"
 #include "dreal/util/dynamic_bitset.h"

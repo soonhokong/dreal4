@@ -27,6 +27,7 @@ dreal_cc_library(
     ],
     hdrs = [
         "box.h",
+        "box_fmt.h",
     ],
     visibility = [
         "//:__pkg__",
@@ -545,6 +546,7 @@ filegroup(
     srcs = [
         "assert.h",
         "box.h",
+        "box_fmt.h",
         "dynamic_bitset.h",
         "if_then_else_eliminator.h",
         "option_value.h",

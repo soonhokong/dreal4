@@ -159,7 +159,7 @@ ostream& operator<<(ostream& os, const Config& config) {
              config.use_local_optimization(), config.dump_theory_literals(),
              config.number_of_jobs(), config.nlopt_ftol_rel(),
              config.nlopt_ftol_abs(), config.nlopt_maxeval(),
-             config.nlopt_maxtime(), config.sat_default_phase(),
+             config.nlopt_maxtime(), fmt::streamed(config.sat_default_phase()),
              config.random_seed());
 }
 

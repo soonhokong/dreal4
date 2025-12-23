@@ -29,10 +29,15 @@
 #include "dreal/solver/formula_evaluator.h"
 #include "dreal/solver/icp_parallel.h"
 #include "dreal/solver/icp_seq.h"
+#include "dreal/symbolic/symbolic_fmt.h"
 #include "dreal/util/assert.h"
+#include "dreal/util/box_fmt.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
+
+template <>
+struct fmt::formatter<dreal::Contractor> : fmt::ostream_formatter {};
 
 namespace dreal {
 
@@ -93,7 +98,7 @@ class TheorySolverStat : public Stat {
     if (enabled()) {
       using fmt::print;
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of CheckSat",
-            "Theory level", num_check_sat_);
+            "Theory level", num_check_sat_.load());
       print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
             "Total time spent in CheckSat", "Theory level",
             timer_check_sat_.seconds());

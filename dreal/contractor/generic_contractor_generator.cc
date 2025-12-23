@@ -19,6 +19,8 @@
 #include <vector>
 
 #include "dreal/contractor/contractor.h"
+#include "dreal/symbolic/symbolic_fmt.h"
+#include "dreal/util/box_fmt.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/nnfizer.h"

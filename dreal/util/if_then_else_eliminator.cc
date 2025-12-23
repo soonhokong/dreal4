@@ -45,7 +45,7 @@ class IfThenElseElimStat : public Stat {
     if (enabled()) {
       using fmt::print;
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Process",
-            "ITE Elim", num_process_);
+            "ITE Elim", num_process_.load());
       if (num_process_ > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Processing", "ITE Elim",

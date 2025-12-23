@@ -101,7 +101,8 @@ void Term::Check(Sort s) const {
       break;
   }
   throw runtime_error{fmt::format(
-      "Term {} is an expression but it is checked against sort {}.", *this)};
+      "Term {} is an expression but it is checked against sort {}.",
+      fmt::streamed(*this))};
 }
 
 void Term::Check(Variable::Type t) const {
@@ -121,7 +122,8 @@ void Term::Check(Variable::Type t) const {
       break;
   }
   throw runtime_error{fmt::format(
-      "Term {} is an expression but it is checked against type {}.", *this, t)};
+      "Term {} is an expression but it is checked against type {}.",
+      fmt::streamed(*this), fmt::streamed(t))};
 }
 
 ostream& operator<<(ostream& os, const Term& t) {

@@ -19,7 +19,15 @@
 #include <tuple>
 #include <utility>
 
+#include "dreal/symbolic/symbolic_fmt.h"
+#include "dreal/util/box_fmt.h"
 #include "dreal/util/logging.h"
+
+// fmt formatters for types used in logging
+template <>
+struct fmt::formatter<dreal::FormulaEvaluator> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<ibex::Interval> : fmt::ostream_formatter {};
 
 using std::vector;
 

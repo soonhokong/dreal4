@@ -15,7 +15,9 @@
 */
 #include "dreal/solver/brancher.h"
 
+#include "dreal/symbolic/symbolic_fmt.h"
 #include "dreal/util/assert.h"
+#include "dreal/util/box_fmt.h"
 #include "dreal/util/logging.h"
 
 namespace dreal {

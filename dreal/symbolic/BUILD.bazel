@@ -33,6 +33,7 @@ dreal_cc_library(
     ],
     hdrs = [
         "symbolic.h",
+        "symbolic_fmt.h",
     ],
     visibility = [
         "//:__pkg__",
@@ -86,6 +87,7 @@ filegroup(
     srcs = [
         "prefix_printer.h",
         "symbolic.h",
+        "symbolic_fmt.h",
         "//third_party/com_github_robotlocomotion_drake:headers",
     ],
     visibility = ["//:__pkg__"],

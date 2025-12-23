@@ -20,6 +20,7 @@
 #include <sstream>
 #include <utility>
 
+#include "dreal/symbolic/symbolic_fmt.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/interval.h"
 #include "dreal/util/logging.h"
@@ -49,7 +50,7 @@ class IbexConverterStat : public Stat {
     if (enabled()) {
       using fmt::print;
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Convert",
-            "Ibex Converter", num_convert_);
+            "Ibex Converter", num_convert_.load());
       if (num_convert_ > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Converting", "Ibex Converter",

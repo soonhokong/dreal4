@@ -27,11 +27,16 @@
 #include <fmt/format.h>
 
 #include "dreal/solver/filter_assertion.h"
+#include "dreal/symbolic/symbolic_fmt.h"
 #include "dreal/util/assert.h"
+#include "dreal/util/box_fmt.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/if_then_else_eliminator.h"
 #include "dreal/util/interrupt.h"
 #include "dreal/util/logging.h"
+
+template <>
+struct fmt::formatter<dreal::Logic> : fmt::ostream_formatter {};
 
 namespace dreal {
 

@@ -28,9 +28,9 @@ IcpStat::~IcpStat() {
   if (enabled()) {
     using fmt::print;
     print(cout, "{:<45} @ {:<16} T{:<2} = {:>15}\n", "Total # of Branching",
-          "ICP level", thread_id_, num_branch_);
+          "ICP level", thread_id_, num_branch_.load());
     print(cout, "{:<45} @ {:<16} T{:<2} = {:>15}\n", "Total # of Pruning",
-          "ICP level", thread_id_, num_prune_);
+          "ICP level", thread_id_, num_prune_.load());
     if (num_branch_ > 0) {
       print(cout, "{:<45} @ {:<16} T{:<2} = {:>15f} sec\n",
             "Total time spent in Branching", "ICP level", thread_id_,

@@ -172,9 +172,9 @@ ostream& PrintModel(ostream& os, const Box& box) {
 
 string ToString(const mpz_class& z) {
   if (sgn(z) == -1) {
-    return fmt::format("(- {})", -z);
+    return fmt::format("(- {})", mpz_class{-z}.get_str());
   }
-  return fmt::format("{}", z);
+  return fmt::format("{}", z.get_str());
 }
 
 string ToRational(const double d) {

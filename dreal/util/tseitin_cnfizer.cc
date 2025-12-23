@@ -49,7 +49,7 @@ class TseitinCnfizerStat : public Stat {
     if (enabled()) {
       using fmt::print;
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Convert",
-            "Tseitin Cnfizer", num_convert_);
+            "Tseitin Cnfizer", num_convert_.load());
       if (num_convert_ > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Converting", "Tseitin Cnfizer",
