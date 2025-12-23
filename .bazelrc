@@ -1,6 +1,12 @@
 # Import any user defined rules.
 try-import %workspace%/user.bazelrc
 
+# Enable WORKSPACE for Bazel 8 compatibility (migration to Bzlmod pending)
+common --enable_workspace
+
+# Use local strategy for tests to avoid sandbox symlink issues with source files
+test --strategy=TestRunner=local
+
 # Add C++14 compiler flags.
 build --cxxopt=-std=c++14
 build --host_cxxopt=-std=c++14
