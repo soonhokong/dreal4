@@ -12,8 +12,8 @@ env:
   HOMEBREW_NO_AUTO_UPDATE: "1"
 
 jobs:
-  big_sur_build_and_test:
-    runs-on: macos-11
+  sonoma_build_and_test:
+    runs-on: macos-14-large
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -30,8 +30,8 @@ jobs:
             --test_output=errors \
             --verbose_failures
 
-  monterey_build_and_test:
-    runs-on: macos-12
+  sequoia_build_and_test:
+    runs-on: macos-15-large
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -48,26 +48,8 @@ jobs:
             --test_output=errors \
             --verbose_failures
 
-  ventura_build_and_test:
-    runs-on: macos-13
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: remove-bazelisk
-        run: if [[ -e /usr/local/bin/bazelisk ]]; then brew rm bazelisk; fi
-      - name: setup
-        run: |
-          rm -f '/usr/local/bin/2to3'
-          ./setup/mac/install_prereqs.sh
-      - name: build and test
-        run: |
-          bazel test //... \
-            -c dbg \
-            --test_output=errors \
-            --verbose_failures
-
-  big_sur_ubsan:
-    runs-on: macos-11
+  sonoma_ubsan:
+    runs-on: macos-14-large
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -86,8 +68,8 @@ jobs:
             --test_tag_filters=-no_ubsan \
             --verbose_failures
 
-  big_sur_asan:
-    runs-on: macos-11
+  sonoma_asan:
+    runs-on: macos-14-large
     steps:
       - name: checkout
         uses: actions/checkout@v3
