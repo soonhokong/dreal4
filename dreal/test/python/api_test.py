@@ -111,6 +111,51 @@ class ApiTest(unittest.TestCase):
         self.assertTrue(result)
         self.assertAlmostEqual(result[x].mid(), math.pi * 3 / 4, places=3)
 
+    def test_set_log_level(self):
+        # Test that set_log_level doesn't raise an exception
+        set_log_level('off')
+        set_log_level('error')
+        set_log_level('warning')
+        set_log_level('info')
+        set_log_level('debug')
+        set_log_level('trace')
+        set_log_level('off')  # Reset to off
+        # Test invalid level
+        with self.assertRaises(RuntimeError):
+            set_log_level('invalid')
+
+    def test_set_log_level_output(self):
+        import os
+        import tempfile
+        # spdlog writes directly to fd 2, so we need to redirect at OS level
+        old_stderr_fd = os.dup(2)
+        try:
+            with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
+                temp_path = f.name
+            # Redirect stderr fd to temp file
+            temp_fd = os.open(temp_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC)
+            os.dup2(temp_fd, 2)
+            os.close(temp_fd)
+
+            set_log_level('debug')
+            result = CheckSatisfiability(And(x >= 0, x <= 1), 0.001)
+            set_log_level('off')
+
+            # Restore stderr
+            os.dup2(old_stderr_fd, 2)
+
+            # Read captured output
+            with open(temp_path, 'r') as f:
+                output = f.read()
+            os.unlink(temp_path)
+
+            # Debug output should contain log messages
+            self.assertIn('[debug]', output)
+        finally:
+            os.dup2(old_stderr_fd, 2)
+            os.close(old_stderr_fd)
+            set_log_level('off')
+
 
 if __name__ == '__main__':
     unittest.main()

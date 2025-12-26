@@ -106,6 +106,35 @@ struct IbexBitSetIterator {
 PYBIND11_MODULE(_dreal_py, m) {
   m.doc() = "dReal Python Module";
 
+  m.def(
+      "set_log_level",
+      [](const string& level) {
+        spdlog::level::level_enum lvl;
+        if (level == "trace") {
+          lvl = spdlog::level::trace;
+        } else if (level == "debug") {
+          lvl = spdlog::level::debug;
+        } else if (level == "info") {
+          lvl = spdlog::level::info;
+        } else if (level == "warning") {
+          lvl = spdlog::level::warn;
+        } else if (level == "error") {
+          lvl = spdlog::level::err;
+        } else if (level == "critical") {
+          lvl = spdlog::level::critical;
+        } else if (level == "off") {
+          lvl = spdlog::level::off;
+        } else {
+          throw std::runtime_error(
+              "Unknown log level: " + level +
+              ". Use: trace, debug, info, warning, error, critical, off");
+        }
+        log()->set_level(lvl);
+      },
+      py::arg("level"),
+      "Set the log verbosity level. "
+      "Valid levels: trace, debug, info, warning, error, critical, off");
+
   py::class_<IbexBitSetIterator>(m, "ibex::BitSet::iterator")
       .def("__iter__",
            [](IbexBitSetIterator& it) -> IbexBitSetIterator& { return it; })
