@@ -17,6 +17,8 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cmath>
+#include <limits>
 #include <sstream>
 #include <utility>
 
@@ -200,6 +202,25 @@ const ExprNode* IbexConverter::ProcessPow(const Expression& base,
   //   2. pow(EXPR, double)
   //   3. pow(double, EXPR)
   //   4. pow(EXPR, EXPR)
+
+  // Handle underflow/overflow for constant pow to avoid IBEX returning empty.
+  if (is_constant(base) && is_constant(exponent)) {
+    const double b{get_constant_value(base)};
+    const double e{get_constant_value(exponent)};
+    const double result{std::pow(b, e)};
+    // Underflow: result is 0 but should be positive
+    if (result == 0.0 && b > 0.0) {
+      return &ibex::ExprConstant::new_scalar(
+          ibex::Interval(0.0, std::numeric_limits<double>::denorm_min()));
+    }
+    // Overflow: result is inf but should be finite positive
+    if (std::isinf(result) && result > 0.0) {
+      return &ibex::ExprConstant::new_scalar(
+          ibex::Interval(std::numeric_limits<double>::max(),
+                         std::numeric_limits<double>::infinity()));
+    }
+  }
+
   if (is_constant(exponent)) {
     const double v{get_constant_value(exponent)};
     if (is_integer(v)) {

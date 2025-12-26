@@ -137,11 +137,17 @@ Box::Interval ExpressionEvaluator::VisitPow(const Expression& e1,
   } else {
     result = pow(first, second);
   }
-  // Handle underflow: if result contains 0 but base is strictly positive,
-  // the lower bound should be the smallest positive subnormal.
-  if (result.lb() == 0.0 && first.lb() > 0.0) {
-    result = Box::Interval(std::numeric_limits<double>::denorm_min(),
-                           result.ub());
+  // Handle underflow: if result is 0 but base is strictly positive,
+  // the true value is in (0, denorm_min]. Use [0, denorm_min] for soundness.
+  if (result.lb() == 0.0 && result.ub() == 0.0 && first.lb() > 0.0) {
+    result = Box::Interval(0.0, std::numeric_limits<double>::denorm_min());
+  }
+  // Handle overflow: if result is [DBL_MAX, DBL_MAX] but should be larger,
+  // widen to [DBL_MAX, +inf] for soundness.
+  if (result.lb() == std::numeric_limits<double>::max() &&
+      result.ub() == std::numeric_limits<double>::max() && first.lb() > 1.0) {
+    result = Box::Interval(std::numeric_limits<double>::max(),
+                           std::numeric_limits<double>::infinity());
   }
   return result;
 }
