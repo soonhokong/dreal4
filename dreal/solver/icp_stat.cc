@@ -27,16 +27,18 @@ namespace dreal {
 IcpStat::~IcpStat() {
   if (enabled()) {
     using fmt::print;
+    const int branch = num_branch_.load();
+    const int prune = num_prune_.load();
     print(cout, "{:<45} @ {:<16} T{:<2} = {:>15}\n", "Total # of Branching",
-          "ICP level", thread_id_, num_branch_);
+          "ICP level", thread_id_, branch);
     print(cout, "{:<45} @ {:<16} T{:<2} = {:>15}\n", "Total # of Pruning",
-          "ICP level", thread_id_, num_prune_);
-    if (num_branch_ > 0) {
+          "ICP level", thread_id_, prune);
+    if (branch > 0) {
       print(cout, "{:<45} @ {:<16} T{:<2} = {:>15f} sec\n",
             "Total time spent in Branching", "ICP level", thread_id_,
             timer_branch_.seconds());
     }
-    if (num_prune_ > 0) {
+    if (prune > 0) {
       print(cout, "{:<45} @ {:<16} T{:<2} = {:>15f} sec\n",
             "Total time spent in Pruning", "ICP level", thread_id_,
             timer_prune_.seconds());

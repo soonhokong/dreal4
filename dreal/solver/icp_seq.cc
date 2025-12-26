@@ -23,6 +23,10 @@
 #include "dreal/util/interrupt.h"
 #include "dreal/util/logging.h"
 
+// fmt formatters (required for fmt 12.x)
+template <>
+struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
+
 using std::pair;
 using std::tie;
 using std::vector;

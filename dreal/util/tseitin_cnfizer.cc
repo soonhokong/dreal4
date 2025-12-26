@@ -48,9 +48,10 @@ class TseitinCnfizerStat : public Stat {
   ~TseitinCnfizerStat() override {
     if (enabled()) {
       using fmt::print;
+      const int convert = num_convert_.load();
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Convert",
-            "Tseitin Cnfizer", num_convert_);
-      if (num_convert_ > 0) {
+            "Tseitin Cnfizer", convert);
+      if (convert > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Converting", "Tseitin Cnfizer",
               timer_convert_.seconds());

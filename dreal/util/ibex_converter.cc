@@ -22,12 +22,24 @@
 #include <sstream>
 #include <utility>
 
+#include <fmt/ostream.h>
+
 #include "dreal/util/exception.h"
 #include "dreal/util/interval.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/math.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
+
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Variable>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Expression>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Formula>
+    : fmt::ostream_formatter {};
 
 namespace dreal {
 
@@ -50,9 +62,10 @@ class IbexConverterStat : public Stat {
   ~IbexConverterStat() override {
     if (enabled()) {
       using fmt::print;
+      const int convert = num_convert_.load();
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Convert",
-            "Ibex Converter", num_convert_);
-      if (num_convert_ > 0) {
+            "Ibex Converter", convert);
+      if (convert > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Converting", "Ibex Converter",
               timer_convert_.seconds());

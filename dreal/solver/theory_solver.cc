@@ -21,6 +21,7 @@
 #include <memory>
 #include <utility>
 
+#include <fmt/ostream.h>
 #include <nlohmann/json.hpp>
 
 #include "dreal/contractor/contractor_forall.h"
@@ -33,6 +34,14 @@
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
+
+template <>
+struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Formula>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::Contractor> : fmt::ostream_formatter {};
 
 namespace dreal {
 
@@ -91,9 +100,10 @@ class TheorySolverStat : public Stat {
   TheorySolverStat& operator=(TheorySolverStat&&) = delete;
   ~TheorySolverStat() override {
     if (enabled()) {
+      const int check_sat = num_check_sat_.load();
       using fmt::print;
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of CheckSat",
-            "Theory level", num_check_sat_);
+            "Theory level", check_sat);
       print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
             "Total time spent in CheckSat", "Theory level",
             timer_check_sat_.seconds());

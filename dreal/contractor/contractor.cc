@@ -79,8 +79,9 @@ class ContractorStat : public Stat {
   ~ContractorStat() override {
     if (enabled()) {
       using fmt::print;
+      const int prune = num_prune_.load();
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Pruning",
-            "Contractor level", num_prune_);
+            "Contractor level", prune);
     }
   }
 

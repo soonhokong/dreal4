@@ -17,9 +17,18 @@
 
 #include <utility>
 
+#include <fmt/ostream.h>
+#include <ibex.h>
+
 #include "dreal/solver/filter_assertion.h"
 #include "dreal/util/assert.h"
 #include "dreal/util/logging.h"
+
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Variable>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<ibex::Interval> : fmt::ostream_formatter {};
 
 namespace dreal {
 
@@ -152,7 +161,7 @@ Box CounterexampleRefiner::Refine(Box box) {
         break;
       default:
         DREAL_LOG_ERROR("LOCAL OPT FAILED: Unknown nlopt error-code {}",
-                        result);
+                        static_cast<int>(result));
         break;
     }
     return box;
