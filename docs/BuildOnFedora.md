@@ -15,7 +15,7 @@ yum install -y \
 	git \
 	gmp-devel \
 	make \
-	python2 \
+	python3 \
 	which
 ```
 

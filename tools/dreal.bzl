@@ -7,10 +7,7 @@ DREAL_VERSION = "4.21.06.2"
 
 DREAL_PREFIX = "opt/dreal/%s" % DREAL_VERSION
 
-PYTHON_VERSION_STRING = select({
-    "@dreal//tools:PY3": "3",
-    "@dreal//tools:PY2": "2.7",
-})
+PYTHON_VERSION_STRING = "3"
 
 PYTHON_PACKAGE_DIR = "lib/python" + PYTHON_VERSION_STRING + "/site-packages"
 
@@ -156,7 +153,7 @@ def dreal_pybind_library(
         data = [
             cc_so_name,
         ],
-        srcs_version = "PY2AND3",
+        srcs_version = "PY3",
         visibility = ["//dreal:__subpackages__"],
         deps = py_deps,
     )
@@ -242,7 +239,7 @@ def dreal_py_test(
         main = main,
         tags = tags,
         deps = deps,
-        srcs_version = "PY2AND3",
+        srcs_version = "PY3",
         **kwargs
     )
 
@@ -301,7 +298,7 @@ def smt2_test(
             "//dreal:dreal",
         ] + data_files,
         main = "test.py",
-        srcs_version = "PY2AND3",
+        srcs_version = "PY3",
         **kwargs
     )
 
@@ -328,7 +325,7 @@ def dr_test(
             "//dreal:dreal",
         ] + data_files,
         main = "test.py",
-        srcs_version = "PY2AND3",
+        srcs_version = "PY3",
         **kwargs
     )
 

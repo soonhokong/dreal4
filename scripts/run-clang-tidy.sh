@@ -35,7 +35,6 @@ clang-tidy "$@" -header-filter="$(realpath .)" -system-headers=0 -p ./ \
 	   -I"/usr/local/opt/ibex@${IBEX_VERSION}/include/ibex/3rd" \
 	   -I/usr/local/opt/clp/include/clp/coin \
 	   -I/usr/local/opt/coinutils/include/coinutils/coin \
-	   -I/usr/local/opt/python@2/Frameworks/Python.framework/Versions/2.7/include/python2.7 \
            -isystem "${BAZEL_EXTERNAL}/cds" \
            -isystem "${BAZEL_EXTERNAL}/com_google_googletest/googletest/include" \
            -isystem "${BAZEL_EXTERNAL}/drake_symbolic" \
