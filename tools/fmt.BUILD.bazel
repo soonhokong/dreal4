@@ -1,18 +1,9 @@
-package(
-    default_visibility = ["//visibility:public"],
-)
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "fmt",
-    hdrs = glob(
-        ["include/fmt/*.h"],
-        exclude = [
-            # The POSIX bindings are not header-only.
-            "include/fmt/posix.h",
-        ],
-    ),
+    hdrs = glob(["include/fmt/*.h"]),
     defines = [
-        "FMT_DEPRECATED_OSTREAM=1",
         "FMT_HEADER_ONLY=1",
         "FMT_NO_FMT_STRING_ALIAS=1",
     ],
