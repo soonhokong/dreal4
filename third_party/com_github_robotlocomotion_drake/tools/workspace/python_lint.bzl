@@ -1,12 +1,15 @@
 #------------------------------------------------------------------------------
 # Internal helper; set up test given name and list of files. Will do nothing
 # if no files given.
+
+load("@rules_python//python:defs.bzl", "py_test")
+
 def _python_lint(name, files, ignore):
     if files:
         if ignore:
             ignore = ["--ignore=" + ",".join(["E%s" % e for e in ignore])]
 
-        native.py_test(
+        py_test(
             name = name,
             size = "small",
             srcs = ["@pycodestyle//:pycodestyle"],

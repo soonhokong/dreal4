@@ -1,6 +1,8 @@
 # Based on Drake's drake.bzl file,
 # https://github.com/RobotLocomotion/drake/blob/master/tools/drake.bzl.
 
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
 DREAL_VERSION = "4.21.06.2"
 
 DREAL_PREFIX = "opt/dreal/%s" % DREAL_VERSION
@@ -148,7 +150,7 @@ def dreal_pybind_library(
             "@pybind11",
         ],
     )
-    native.py_library(
+    py_library(
         name = name,
         srcs = py_srcs,
         data = [
@@ -234,7 +236,7 @@ def dreal_py_test(
         deps,
         **kwargs):
     """Creates a rule to declare a Python unit test."""
-    native.py_test(
+    py_test(
         name = name,
         srcs = srcs,
         main = main,
@@ -286,7 +288,7 @@ def smt2_test(
     data_files = native.glob([
         smt2 + "*",
     ])
-    native.py_test(
+    py_test(
         name = name,
         args = [
             "$(location //dreal:dreal)",
@@ -313,7 +315,7 @@ def dr_test(
     data_files = native.glob([
         dr + "*",
     ])
-    native.py_test(
+    py_test(
         name = name,
         args = [
             "$(location //dreal:dreal)",

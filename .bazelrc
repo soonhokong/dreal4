@@ -123,3 +123,11 @@ test:kcov --test_timeout=120,600,1800,7200
 # When compiilng dReal as an external package, this rcfile is not loaded and we
 # won't promote warnings to errors by default.
 build --copt=-Werror
+
+### Bazel 8 compatibility ###
+# Use WORKSPACE instead of bzlmod
+common --noenable_bzlmod
+common --enable_workspace
+
+# Allow empty globs for compatibility with older rules
+common --incompatible_disallow_empty_glob=false
