@@ -6,6 +6,10 @@ load(
 )
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+# Override local_config_python before any other loads to avoid Python 2 issues
+load("//tools:local_config_python.bzl", "local_config_python")
+local_config_python(name = "local_config_python")
+
 github_archive(
     name = "bazel_skylib",  # Apache-2.0
     commit = "1.4.0",
@@ -51,10 +55,14 @@ github_archive(
 # Note: Dependency of rules_pkg in dreal/workspace.bzl
 http_archive(
     name = "rules_python",  # Apache-2.0
-    sha256 = "8c15896f6686beb5c631a4459a3aa8392daccaab805ea899c9d14215074b60ef",
-    strip_prefix = "rules_python-0.17.3",
-    url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.17.3.tar.gz",
+    sha256 = "4f7e2aa1eb9aa722d96498f5ef514f426c1f55161c3c9ae628c857a7128ceb07",
+    strip_prefix = "rules_python-1.0.0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/1.0.0/rules_python-1.0.0.tar.gz",
 )
+
+load("@rules_python//python:repositories.bzl", "py_repositories")
+
+py_repositories()
 
 load("//dreal:workspace.bzl", "dreal_workspace")
 

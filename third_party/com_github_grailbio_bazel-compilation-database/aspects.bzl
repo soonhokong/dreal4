@@ -57,8 +57,8 @@ _all_rules = _cc_rules + _objc_rules
 
 def _compilation_db_json(compilation_db):
     # Return a JSON string for the compilation db entries.
-
-    entries = [entry.to_json() for entry in compilation_db]
+    # Note: to_json() was removed in Bazel 8, use json.encode() instead
+    entries = [json.encode({"directory": entry.directory, "file": entry.file, "command": entry.command}) for entry in compilation_db]
     return ",\n ".join(entries)
 
 def _is_cpp_target(srcs):

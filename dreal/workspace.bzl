@@ -38,15 +38,16 @@ def dreal_workspace():
 
     gmp_repository(name = "gmp")
 
-    python_configure(name = "local_config_python")
+    # Note: local_config_python is now defined in WORKSPACE to support Bazel 8
+    # python_configure(name = "local_config_python")
 
     native.register_toolchains("@local_config_python//:py_toolchain")
 
     http_archive(
         name = "rules_license",
-        sha256 = "6157e1e68378532d0241ecd15d3c45f6e5cfd98fc10846045509fb2a7cc9e381",
+        sha256 = "26d4021f6898e23b82ef953078389dd49ac2b5618ac564ade4ef87cced147b38",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_license/releases/download/0.0.4/rules_license-0.0.4.tar.gz",
+            "https://github.com/bazelbuild/rules_license/releases/download/1.0.0/rules_license-1.0.0.tar.gz",
         ],
     )
 
