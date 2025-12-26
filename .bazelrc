@@ -1,137 +1,52 @@
-# Import any user defined rules.
+# Import user-defined rules
 try-import %workspace%/user.bazelrc
 
-# Add C++14 compiler flags.
-build --cxxopt=-std=c++14
-build --host_cxxopt=-std=c++14
-
-# Default to an optimized build.
-build -c opt
-
-# lexyacc
+# C++14 and default build settings
+build --cxxopt=-std=c++14 --host_cxxopt=-std=c++14
+build -c opt --force_pic --strip=never --strict_system_includes --copt=-Werror
 build --extra_toolchains=@dreal//third_party/com_github_google_kythe/tools/build_rules:lexyacc_remote_toolchain
 
-# Default build options.
-build --force_pic
-build --strip=never
-build --strict_system_includes
-
-# Default test options.
+# Test settings
 test --test_output=errors
 
-### Cpplint. ###
-# By default, cpplint tests are run as part of `bazel test` alongside all of
-# the other compilation and test targets.  This is a convenience shortcut to
-# only do the cpplint testing and nothing else.
-test:cpplint --build_tests_only
-test:cpplint --test_tag_filters=cpplint
+# Use WORKSPACE (Bzlmod migration pending)
+common --noenable_bzlmod --enable_workspace --incompatible_disallow_empty_glob=false
 
-### ASan build. ###
-build:asan --copt=-g
-build:asan --copt=-fno-common
-build:asan --copt=-fsanitize=address
-build:asan --copt=-O0
-build:asan --copt=-fno-omit-frame-pointer
-build:asan --copt=-fno-optimize-sibling-calls
-build:asan --copt=-DCDS_ADDRESS_SANITIZER_ENABLED
-build:asan --copt -Wno-macro-redefined
-build:asan --copt -D_FORTIFY_SOURCE=0
-build:asan --linkopt=-fsanitize=address
-build:asan --linkopt=-fuse-ld=ld
-build:asan --start_end_lib=no
-build:asan --test_env=ASAN_OPTIONS
-build:asan --test_env=LSAN_OPTIONS
-build:asan --test_tag_filters=-no_asan,-no_lsan
-build:asan --test_timeout=120,600,1800,7200
-
-### LSan build. ###
-build:lsan --copt=-g
-build:lsan --copt=-fno-common
-build:lsan --copt=-fsanitize=leak
-build:lsan --copt=-O0
-build:lsan --copt=-fno-omit-frame-pointer
-build:lsan --copt -Wno-macro-redefined
-build:lsan --copt -D_FORTIFY_SOURCE=0
-build:lsan --linkopt=-fsanitize=leak
-build:lsan --test_env=LSAN_OPTIONS
-build:lsan --test_env=LSAN_SYMBOLIZER_PATH
-build:lsan --test_tag_filters=-no_asan,-no_lsan
-build:lsan --test_timeout=120,600,1800,7200
-
-### TSan build. ###
-build:tsan --build_tests_only
-build:tsan --copt -g
-build:tsan --copt -fsanitize=thread
-build:tsan --copt -O1
-build:tsan --copt -fno-omit-frame-pointer
-build:tsan --copt -DCDS_THREAD_SANITIZER_ENABLED
-build:tsan --copt -Wno-macro-redefined
-build:tsan --copt -D_FORTIFY_SOURCE=0
-
-# From Tsan documentation for Clang-3.9:
-# fsanitize=thread flag will cause Clang to act as though the -fPIE flag
-# had been supplied if compiling without -fPIC, and as though the
-# -pie flag had been supplied if linking an executable
-# Bug in GCC: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67308
-build:tsan --noforce_pic
-build:tsan --linkopt -fsanitize=thread
-build:tsan --test_env=TSAN_OPTIONS
-build:tsan --test_tag_filters=-no_tsan
-build:tsan --test_timeout=180,900,2700,10800
-
-### UBSan build. ###
-build:ubsan --build_tests_only
-build:ubsan --copt -g
-build:ubsan --copt -fsanitize=undefined
-# Since Bazel uses clang instead of clang++, enabling -fsanitize=vptr would
-# require extra linkopts that cause segmentation faults on pure C code.
-build:ubsan --copt -fno-sanitize=float-divide-by-zero,vptr
-build:ubsan --copt -O1
-build:ubsan --copt -fno-omit-frame-pointer
-build:ubsan --copt -Wno-macro-redefined
-build:ubsan --copt -D_FORTIFY_SOURCE=0
-build:ubsan --copt -fno-sanitize=float-divide-by-zero,function,vptr
-build:ubsan --copt -fsanitize-link-c++-runtime
-build:ubsan --linkopt -fsanitize=undefined
-build:ubsan --linkopt -fsanitize-link-c++-runtime
-build:ubsan --linkopt -rtlib=compiler-rt
-
-# We need the following in Ubuntu. For now, we pass this via --linkopt in CI.
-# build:ubsan --linkopt -lgcc_s
-build:ubsan --test_env=UBSAN_OPTIONS
-build:ubsan --test_tag_filters=-no_ubsan
-build:ubsan --test_timeout=120,600,1800,7200
-
-### Kcov coverage build. ###
-build:kcov --copt -g
-build:kcov --copt -O0
-test:kcov --spawn_strategy=local
-test:kcov --run_under //tools:kcov
-test:kcov --local_test_jobs=1
-test:kcov --test_tag_filters=-cpplint,-pycodestyle,-no_kcov
-test:kcov --nocache_test_results
-test:kcov --test_timeout=120,600,1800,7200
-
-# When compiling with dReal as the main WORKSPACE (i.e., if and only if this
-# rcfile is loaded), we enable -Werror by default for dReal's *own* targets,
-# but not for our externals.
-#
-# Developers may still disable errors locally by passing --copt=-w on the
-# command line, or promote *any* warnings even from externals to errors via
-# --copt=-Werror.
-#
-# When compiilng dReal as an external package, this rcfile is not loaded and we
-# won't promote warnings to errors by default.
-build --copt=-Werror
-
-### Bazel 8 compatibility ###
-# Use WORKSPACE instead of bzlmod
-common --noenable_bzlmod
-common --enable_workspace
-
-# Allow empty globs for compatibility with older rules
-common --incompatible_disallow_empty_glob=false
-
-# Disable automatic __init__.py creation to prevent source file truncation
-# when hardlinks are used in the execroot
+# Python: disable auto __init__.py to prevent source truncation
 build --incompatible_default_to_explicit_init_py
+
+# Cpplint shortcut
+test:cpplint --build_tests_only --test_tag_filters=cpplint
+
+### Sanitizer configs ###
+# Common sanitizer flags
+build:sanitizer_common --copt=-g --copt=-fno-omit-frame-pointer --copt=-Wno-macro-redefined --copt=-D_FORTIFY_SOURCE=0
+
+# ASan
+build:asan --config=sanitizer_common
+build:asan --copt=-fno-common --copt=-fsanitize=address --copt=-O0 --copt=-fno-optimize-sibling-calls --copt=-DCDS_ADDRESS_SANITIZER_ENABLED
+build:asan --linkopt=-fsanitize=address --linkopt=-fuse-ld=ld --start_end_lib=no
+build:asan --test_env=ASAN_OPTIONS --test_env=LSAN_OPTIONS --test_tag_filters=-no_asan,-no_lsan --test_timeout=120,600,1800,7200
+
+# LSan
+build:lsan --config=sanitizer_common
+build:lsan --copt=-fno-common --copt=-fsanitize=leak --copt=-O0
+build:lsan --linkopt=-fsanitize=leak
+build:lsan --test_env=LSAN_OPTIONS --test_env=LSAN_SYMBOLIZER_PATH --test_tag_filters=-no_asan,-no_lsan --test_timeout=120,600,1800,7200
+
+# TSan
+build:tsan --config=sanitizer_common --build_tests_only --noforce_pic
+build:tsan --copt=-fsanitize=thread --copt=-O1 --copt=-DCDS_THREAD_SANITIZER_ENABLED
+build:tsan --linkopt=-fsanitize=thread
+build:tsan --test_env=TSAN_OPTIONS --test_tag_filters=-no_tsan --test_timeout=180,900,2700,10800
+
+# UBSan
+build:ubsan --config=sanitizer_common --build_tests_only
+build:ubsan --copt=-fsanitize=undefined --copt=-fno-sanitize=float-divide-by-zero,vptr,function --copt=-O1 --copt=-fsanitize-link-c++-runtime
+build:ubsan --linkopt=-fsanitize=undefined --linkopt=-fsanitize-link-c++-runtime --linkopt=-rtlib=compiler-rt
+build:ubsan --test_env=UBSAN_OPTIONS --test_tag_filters=-no_ubsan --test_timeout=120,600,1800,7200
+
+# Kcov coverage
+build:kcov --copt=-g --copt=-O0
+test:kcov --spawn_strategy=local --run_under=//tools:kcov --local_test_jobs=1
+test:kcov --test_tag_filters=-cpplint,-pycodestyle,-no_kcov --nocache_test_results --test_timeout=120,600,1800,7200
