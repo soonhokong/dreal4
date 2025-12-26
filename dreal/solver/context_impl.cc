@@ -25,8 +25,22 @@
 #include <utility>
 
 #include <fmt/format.h>
+#include <fmt/ostream.h>
 
 #include "dreal/solver/filter_assertion.h"
+#include "dreal/solver/context.h"
+#include "dreal/symbolic/symbolic.h"
+
+template <>
+struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Formula>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Variable>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::Logic> : fmt::ostream_formatter {};
 #include "dreal/util/assert.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/if_then_else_eliminator.h"
@@ -286,18 +300,62 @@ void Context::Impl::Minimize(const vector<Expression>& functions) {
   }
 
   // Collects side-constraints related to the cost functions.
+  // Also identifies equality constraints of the form `var = expr` where
+  // `var` doesn't appear in `expr`. Such variables can be eliminated by
+  // substitution rather than being quantified, which improves performance.
   unordered_set<Formula> constraints;
+  ExpressionSubstitution elim_subst;  // Maps var ↦ expr for elimination
+  Variables eliminated_vars;
   bool keep_going = true;
   while (keep_going) {
     keep_going = false;
     for (const Formula& constraint : stack_) {
       if (constraints.find(constraint) == constraints.end() &&
           HaveIntersection(x_vars, constraint.GetFreeVariables())) {
+        // Check if this is an equality constraint var = expr where var
+        // doesn't appear in expr and var is not in the original objective
+        Variables orig_obj_vars;
+        for (const Expression& f : functions) {
+          orig_obj_vars += f.GetVariables();
+        }
+        if (is_equal_to(constraint)) {
+          const Expression& lhs = get_lhs_expression(constraint);
+          const Expression& rhs = get_rhs_expression(constraint);
+          if (is_variable(lhs)) {
+            const Variable& var = get_variable(lhs);
+            if (!rhs.GetVariables().include(var) &&
+                !orig_obj_vars.include(var)) {
+              // var = rhs, eliminate var
+              elim_subst.emplace(var, rhs);
+              eliminated_vars.insert(var);
+              constraints.insert(constraint);
+              keep_going = true;
+              continue;
+            }
+          }
+          if (is_variable(rhs)) {
+            const Variable& var = get_variable(rhs);
+            if (!lhs.GetVariables().include(var) &&
+                !orig_obj_vars.include(var)) {
+              // lhs = var, eliminate var
+              elim_subst.emplace(var, lhs);
+              eliminated_vars.insert(var);
+              constraints.insert(constraint);
+              keep_going = true;
+              continue;
+            }
+          }
+        }
         x_vars += constraint.GetFreeVariables();
         constraints.insert(constraint);
         keep_going = true;
       }
     }
+  }
+
+  // Remove eliminated variables from x_vars
+  for (const Variable& v : eliminated_vars) {
+    x_vars.erase(v);
   }
 
   for (const Variable& x_i : x_vars) {
@@ -318,7 +376,23 @@ void Context::Impl::Minimize(const vector<Expression>& functions) {
     }
   }
 
+  // Apply elimination substitution to the main substitution
+  // For eliminated var, we need var_ = expr_ in the quantified formula
+  for (const auto& [var, expr] : elim_subst) {
+    const Variable y_i{var.get_name() + "_", var.get_type()};
+    subst.emplace(var, expr.Substitute(subst));
+  }
+
   for (const Formula& constraint : constraints) {
+    // Skip eliminated equality constraints - they're handled by substitution
+    if (eliminated_vars.size() > 0 && is_equal_to(constraint)) {
+      const Expression& lhs = get_lhs_expression(constraint);
+      const Expression& rhs = get_rhs_expression(constraint);
+      if ((is_variable(lhs) && eliminated_vars.include(get_variable(lhs))) ||
+          (is_variable(rhs) && eliminated_vars.include(get_variable(rhs)))) {
+        continue;
+      }
+    }
     set_of_negated_phi.insert(!constraint.Substitute(subst));
   }
 
