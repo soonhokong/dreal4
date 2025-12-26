@@ -16,6 +16,7 @@
 #include "dreal/solver/expression_evaluator.h"
 
 #include <algorithm>  // to suppress cpplint for the use of 'min'
+#include <limits>
 #include <numeric>
 #include <utility>
 
@@ -119,22 +120,30 @@ Box::Interval ExpressionEvaluator::VisitPow(const Expression& e1,
                                             const Box& box) const {
   const Box::Interval first{Visit(e1, box)};
   const Box::Interval second{Visit(e2, box)};
+  Box::Interval result;
   if (second.is_degenerated() && !second.is_empty()) {
     // This indicates that this interval is a point.
     DREAL_ASSERT(second.lb() == second.ub());
     const double point{second.lb()};
     if (is_integer(point)) {
       if (point == 2.0) {
-        return sqr(first);
+        result = sqr(first);
       } else {
-        return pow(first, static_cast<int>(point));
+        result = pow(first, static_cast<int>(point));
       }
     } else {
-      return pow(first, point);
+      result = pow(first, point);
     }
   } else {
-    return pow(first, second);
+    result = pow(first, second);
   }
+  // Handle underflow: if result contains 0 but base is strictly positive,
+  // the lower bound should be the smallest positive subnormal.
+  if (result.lb() == 0.0 && first.lb() > 0.0) {
+    result = Box::Interval(std::numeric_limits<double>::denorm_min(),
+                           result.ub());
+  }
+  return result;
 }
 
 Box::Interval ExpressionEvaluator::VisitSin(const Expression& e,
