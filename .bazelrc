@@ -131,3 +131,7 @@ common --enable_workspace
 
 # Allow empty globs for compatibility with older rules
 common --incompatible_disallow_empty_glob=false
+
+# Disable automatic __init__.py creation to prevent source file truncation
+# when hardlinks are used in the execroot
+build --incompatible_default_to_explicit_init_py
