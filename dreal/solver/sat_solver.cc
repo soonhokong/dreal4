@@ -77,6 +77,18 @@ void SatSolver::AddLearnedClause(const set<Formula>& formulas) {
   picosat_add(sat_, 0);
 }
 
+void SatSolver::AddLearnedClause(const set<Formula>& formulas,
+                                 const vector<Literal>& boolean_model) {
+  for (const Formula& f : formulas) {
+    AddLiteral(!predicate_abstractor_.Convert(f));
+  }
+  for (const auto& p : boolean_model) {
+    const int sat_var = to_sat_var_[p.first.get_id()];
+    picosat_add(sat_, p.second ? -sat_var : sat_var);
+  }
+  picosat_add(sat_, 0);
+}
+
 void SatSolver::AddClauses(const vector<Formula>& formulas) {
   for (const Formula& f : formulas) {
     AddClause(f);

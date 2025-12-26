@@ -184,7 +184,16 @@ optional<Box> Context::Impl::CheckSatCore(const ScopedVector<Formula>& stack,
               "ContextImpl::CheckSatCore() - size of explanation = {} - stack "
               "size = {}",
               explanation.size(), stack.get_vector().size());
-          sat_solver->AddLearnedClause(explanation);
+          // Include positive Boolean literals (those that are true) in the
+          // learned clause. These might have forced theory constraints via
+          // implications from ITE elimination.
+          vector<pair<Variable, bool>> positive_bool_literals;
+          for (const auto& p : boolean_model) {
+            if (p.second) {
+              positive_bool_literals.push_back(p);
+            }
+          }
+          sat_solver->AddLearnedClause(explanation, positive_bool_literals);
           if (DREAL_LOG_TRACE_ENABLED) {
             for (const auto& f_i : stack.get_vector()) {
               DREAL_LOG_TRACE("ContextImpl::CheckSatCore: Stack {}", f_i);

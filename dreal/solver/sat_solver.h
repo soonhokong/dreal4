@@ -73,6 +73,12 @@ class SatSolver {
   /// the solver.
   void AddLearnedClause(const std::set<Formula>& formulas);
 
+  /// Given @p formulas = {f₁, ..., fₙ} and @p boolean_model = {(v₁, b₁), ...,
+  /// (vₘ, bₘ)}, adds a clause (¬f₁ ∨ ... ∨ ¬fₙ ∨ ¬l₁ ∨ ... ∨ ¬lₘ) where lᵢ is
+  /// vᵢ if bᵢ is true, or ¬vᵢ if bᵢ is false.
+  void AddLearnedClause(const std::set<Formula>& formulas,
+                        const std::vector<Literal>& boolean_model);
+
   /// Checks the satisfiability of the current configuration.
   ///
   /// @returns a witness, satisfying model if the problem is satisfiable.
