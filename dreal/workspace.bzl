@@ -53,27 +53,26 @@ def dreal_workspace():
 
     http_archive(
         name = "rules_pkg",
-        sha256 = "eea0f59c28a9241156a47d7a8e32db9122f3d50b505fae0f33de6ce4d9b61834",
+        sha256 = "b5c9184a23bb0bcff241981fd9d9e2a97638a1374c9953bb1808836ce711f990",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.8.0/rules_pkg-0.8.0.tar.gz",
-            "https://github.com/bazelbuild/rules_pkg/releases/download/0.8.0/rules_pkg-0.8.0.tar.gz",
+            "https://github.com/bazelbuild/rules_pkg/releases/download/1.2.0/rules_pkg-1.2.0.tar.gz",
         ],
     )
 
     github_archive(
         name = "spdlog",  # MIT
         build_file = str(Label("//tools:spdlog.BUILD.bazel")),
-        commit = "v1.11.0",
+        commit = "v1.16.0",
         repository = "gabime/spdlog",
-        sha256 = "ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb",
+        sha256 = "8741753e488a78dd0d0024c980e1fb5b5c85888447e309d9cb9d949bdb52aa3e",
     )
 
     github_archive(
         name = "fmt",  # MIT
         build_file = str(Label("//tools:fmt.BUILD.bazel")),
-        commit = "9.1.0",
+        commit = "12.0.0",
         repository = "fmtlib/fmt",
-        sha256 = "5dea48d1fcddc3ec571ce2058e13910a0d4a6bab4cc09a809d8b1dd1c88ae6f2",
+        sha256 = "aa3e8fbb6a0066c03454434add1f1fc23299e85758ceec0d7d2d974431481e40",
     )
 
     github_archive(
@@ -87,16 +86,16 @@ def dreal_workspace():
     github_archive(
         name = "pybind11",  # BSD
         build_file = str(Label("//tools:pybind11.BUILD.bazel")),
-        commit = "v2.10.2",
+        commit = "v3.0.1",
         repository = "pybind/pybind11",
-        sha256 = "93bd1e625e43e03028a3ea7389bba5d3f9f2596abc074b068e70f4ef9b1314ae",
+        sha256 = "741633da746b7c738bb71f1854f957b9da660bcd2dce68d71949037f0969d0ca",
     )
 
     github_archive(
         name = "com_google_absl",  # BSD
-        commit = "20230125.1",
+        commit = "20250814.1",
         repository = "abseil/abseil-cpp",
-        sha256 = "81311c17599b3712069ded20cca09a62ab0bf2a89dfa16993786c8782b7ed145",
+        sha256 = "1692f77d1739bacf3f94337188b78583cf09bab7e420d2dc6c5605a4f86785a1",
     )
 
     github_archive(
@@ -109,7 +108,8 @@ def dreal_workspace():
 
     github_archive(
         name = "json",  # MIT
-        commit = "b2306145e1789368e6f261680e8dc007e91cc986",  # 20230131
+        build_file = str(Label("//tools:json.BUILD.bazel")),
+        commit = "v3.12.0",
         repository = "nlohmann/json",
-        sha256 = "dfb6ec5af1feeb9ce7efa1554676335ca9dde5f60424642c8ac2f9e0a66da909",
+        sha256 = "4b92eb0c06d10683f7447ce9406cb97cd4b453be18d7279320f7b2f025c10187",
     )
