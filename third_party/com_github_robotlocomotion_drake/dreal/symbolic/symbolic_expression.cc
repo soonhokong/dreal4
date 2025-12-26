@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstddef>
+#include <limits>
 #include <map>
 #include <memory>
 #include <sstream>
@@ -711,7 +712,13 @@ Expression pow(const Expression& e1, const Expression& e2) {
       // Constant folding
       const double v1{get_constant_value(e1)};
       ExpressionPow::check_domain(v1, v2);
-      return Expression{std::pow(v1, v2)};
+      const double result{std::pow(v1, v2)};
+      // Handle underflow: if result is 0 but mathematically should be positive,
+      // return smallest positive subnormal to maintain soundness.
+      if (result == 0.0 && v1 > 0.0) {
+        return Expression{std::numeric_limits<double>::denorm_min()};
+      }
+      return Expression{result};
     }
     // pow(E, 0) => 1
     // TODO(soonho-tri): This simplification is not sound since it cancels `E`
