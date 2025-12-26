@@ -48,10 +48,10 @@ command_exists () {
 }
 
 if ! command_exists bazel; then
-    BAZEL_VERSION=7.0.0
+    BAZEL_VERSION=8.5.0
     BAZEL_DEBNAME=bazel_${BAZEL_VERSION}-linux-x86_64.deb
     BAZEL_URL=https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/${BAZEL_DEBNAME}
-    BAZEL_SHA256=e1fd8ffa3cc09bf13b98a69b2b5041cea9d01029112b7e2dbbab5be6f0a3115c
+    BAZEL_SHA256=11b2c271a95295cc7a28f73fa6744a915b93df85e1bd42b79ab3ded3e61db228
     apt-get install -y --no-install-recommends wget
     wget "${BAZEL_URL}"
     if echo "${BAZEL_SHA256}  ${BAZEL_DEBNAME}" | sha256sum -c; then
