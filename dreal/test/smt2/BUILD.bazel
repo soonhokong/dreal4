@@ -1250,6 +1250,26 @@ smt2_test(
     size = "small",
 )
 
+smt2_test(
+    name = "define_fun_let_01",
+    size = "small",
+)
+
+smt2_test(
+    name = "define_fun_let_02",
+    size = "small",
+)
+
+smt2_test(
+    name = "define_fun_let_03",
+    size = "small",
+)
+
+smt2_test(
+    name = "define_fun_let_04",
+    size = "small",
+)
+
 licenses(["notice"])  # Apache 2.0
 
 exports_files(["LICENSE"])

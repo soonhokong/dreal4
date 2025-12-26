@@ -15,6 +15,7 @@
 */
 #include <istream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "dreal/smt2/location.hh"
@@ -185,6 +186,10 @@ class Smt2Driver {
 
   /** The context filled during parsing of the expressions. */
   Context context_;
+
+ public:
+  /// Pending let bindings to be applied by substitution.
+  std::vector<std::pair<Variable, Term>> pending_let_bindings_;
 };
 
 }  // namespace dreal
