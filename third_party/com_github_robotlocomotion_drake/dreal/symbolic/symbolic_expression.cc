@@ -713,10 +713,10 @@ Expression pow(const Expression& e1, const Expression& e2) {
       const double v1{get_constant_value(e1)};
       ExpressionPow::check_domain(v1, v2);
       const double result{std::pow(v1, v2)};
-      // Handle underflow: if result is 0 but mathematically should be positive,
-      // return smallest positive subnormal to maintain soundness.
-      if (result == 0.0 && v1 > 0.0) {
-        return Expression{std::numeric_limits<double>::denorm_min()};
+      // Handle underflow/overflow: don't constant-fold, keep as pow so
+      // IbexConverter can return a sound interval.
+      if ((result == 0.0 && v1 > 0.0) || std::isinf(result)) {
+        return Expression{new ExpressionPow(e1, e2)};
       }
       return Expression{result};
     }

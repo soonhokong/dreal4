@@ -15,7 +15,9 @@
 */
 #include "dreal/solver/expression_evaluator.h"
 
+#include <cmath>
 #include <iostream>
+#include <limits>
 #include <sstream>
 
 #include <gtest/gtest.h>
@@ -53,6 +55,27 @@ TEST_F(ExpressionEvaluatorTest, Arithmetic1) {
   ostringstream oss;
   oss << evaluator;
   EXPECT_EQ(oss.str(), "ExpressionEvaluator((x + y + z))");
+}
+
+TEST_F(ExpressionEvaluatorTest, PowUnderflow) {
+  // pow(0.5, 1075) underflows to 0, but should return [0, denorm_min]
+  const Expression e{pow(Expression{0.5}, Expression{1075.0})};
+  const ExpressionEvaluator evaluator{e};
+  const Box::Interval result{evaluator(box_)};
+
+  EXPECT_EQ(result.lb(), 0.0);
+  EXPECT_EQ(result.ub(), std::numeric_limits<double>::denorm_min());
+}
+
+TEST_F(ExpressionEvaluatorTest, PowOverflow) {
+  // pow(2, 1024) overflows to inf, but should return [DBL_MAX, +inf]
+  const Expression e{pow(Expression{2.0}, Expression{1024.0})};
+  const ExpressionEvaluator evaluator{e};
+  const Box::Interval result{evaluator(box_)};
+
+  EXPECT_EQ(result.lb(), std::numeric_limits<double>::max());
+  EXPECT_TRUE(std::isinf(result.ub()));
+  EXPECT_GT(result.ub(), 0.0);  // +inf, not -inf
 }
 
 // TODO(soonho): Add more tests.

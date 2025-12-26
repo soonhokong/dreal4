@@ -1280,6 +1280,16 @@ smt2_test(
     size = "small",
 )
 
+smt2_test(
+    name = "pow_overflow_01",
+    size = "small",
+)
+
+smt2_test(
+    name = "pow_overflow_02",
+    size = "small",
+)
+
 licenses(["notice"])  # Apache 2.0
 
 exports_files(["LICENSE"])
