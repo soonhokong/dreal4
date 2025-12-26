@@ -1,8 +1,8 @@
 # Import user-defined rules
 try-import %workspace%/user.bazelrc
 
-# C++14 and default build settings
-build --cxxopt=-std=c++14 --host_cxxopt=-std=c++14
+# C++17 and default build settings
+build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build -c opt --force_pic --strip=never --strict_system_includes --copt=-Werror
 build --extra_toolchains=@dreal//third_party/com_github_google_kythe/tools/build_rules:lexyacc_remote_toolchain
 
