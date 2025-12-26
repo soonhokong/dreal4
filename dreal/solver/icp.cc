@@ -21,6 +21,14 @@
 
 #include "dreal/util/logging.h"
 
+// fmt formatters (required for fmt 12.x)
+template <>
+struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::FormulaEvaluator> : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<ibex::Interval> : fmt::ostream_formatter {};
+
 using std::vector;
 
 namespace dreal {

@@ -20,6 +20,11 @@
 
 #include "dreal/util/exception.h"
 
+// Formatter for SatDefaultPhase enum
+template <>
+struct fmt::formatter<dreal::Config::SatDefaultPhase>
+    : fmt::ostream_formatter {};
+
 namespace dreal {
 
 using std::ostream;

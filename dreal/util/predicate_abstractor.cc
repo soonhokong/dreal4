@@ -43,9 +43,10 @@ class PredicateAbstractorStat : public Stat {
   ~PredicateAbstractorStat() override {
     if (enabled()) {
       using fmt::print;
+      const int convert = num_convert_.load();
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Convert",
-            "Predicate Abstractor", num_convert_);
-      if (num_convert_ > 0) {
+            "Predicate Abstractor", convert);
+      if (convert > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Converting", "Predicate Abstractor",
               timer_convert_.seconds());

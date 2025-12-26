@@ -15,6 +15,7 @@
 */
 #include "dreal/smt2/term.h"
 
+#include <sstream>
 #include <stdexcept>
 #include <utility>
 
@@ -100,8 +101,10 @@ void Term::Check(Sort s) const {
       }
       break;
   }
-  throw runtime_error{fmt::format(
-      "Term {} is an expression but it is checked against sort {}.", *this)};
+  std::ostringstream oss;
+  oss << "Term " << *this << " is checked against sort "
+      << static_cast<int>(s) << ".";
+  throw runtime_error{oss.str()};
 }
 
 void Term::Check(Variable::Type t) const {
@@ -120,8 +123,9 @@ void Term::Check(Variable::Type t) const {
       }
       break;
   }
-  throw runtime_error{fmt::format(
-      "Term {} is an expression but it is checked against type {}.", *this, t)};
+  std::ostringstream oss;
+  oss << "Term " << *this << " is checked against type " << t << ".";
+  throw runtime_error{oss.str()};
 }
 
 ostream& operator<<(ostream& os, const Term& t) {

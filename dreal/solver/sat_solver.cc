@@ -18,11 +18,23 @@
 #include <ostream>
 #include <utility>
 
+#include <fmt/ostream.h>
+
 #include "dreal/util/assert.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
+
+template <>
+struct fmt::formatter<dreal::Config::SatDefaultPhase>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Formula>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Variable>
+    : fmt::ostream_formatter {};
 
 namespace dreal {
 

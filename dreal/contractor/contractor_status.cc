@@ -18,10 +18,19 @@
 #include <atomic>
 #include <utility>
 
+#include <fmt/ostream.h>
+
 #include "dreal/util/assert.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
+
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Variable>
+    : fmt::ostream_formatter {};
+template <>
+struct fmt::formatter<dreal::drake::symbolic::Formula>
+    : fmt::ostream_formatter {};
 
 using std::set;
 using std::vector;
@@ -43,10 +52,11 @@ class ContractorStatusStat : public Stat {
   ~ContractorStatusStat() override {
     if (enabled()) {
       using fmt::print;
+      const int gen = num_explanation_generation_.load();
       print(cout, "{:<45} @ {:<20} = {:>15}\n",
             "Total # of Explanation Generations", "ContractorStatus level",
-            num_explanation_generation_);
-      if (num_explanation_generation_) {
+            gen);
+      if (gen > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Explanation Generations",
               "ContractorStatus level",

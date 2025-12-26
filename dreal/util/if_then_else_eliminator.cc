@@ -44,9 +44,10 @@ class IfThenElseElimStat : public Stat {
   ~IfThenElseElimStat() override {
     if (enabled()) {
       using fmt::print;
+      const int process = num_process_.load();
       print(cout, "{:<45} @ {:<20} = {:>15}\n", "Total # of Process",
-            "ITE Elim", num_process_);
-      if (num_process_ > 0) {
+            "ITE Elim", process);
+      if (process > 0) {
         print(cout, "{:<45} @ {:<20} = {:>15f} sec\n",
               "Total time spent in Processing", "ITE Elim",
               timer_process_.seconds());
