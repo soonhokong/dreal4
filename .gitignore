@@ -5,6 +5,7 @@
 /.python-version
 /MANIFEST
 /user.bazelrc
+MODULE.bazel.lock
 bazel-*
 build/
 compile_commands.json
