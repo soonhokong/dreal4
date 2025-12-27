@@ -5,25 +5,26 @@ on:
     - cron: '0 6 * * *'
 
 jobs:
-  ubuntu_20_04_install:
-    name: ubuntu-20.04 install
-    runs-on: ubuntu-20.04
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: setup
-        run: sudo ./setup/ubuntu/20.04/install.sh
-        shell: bash
-      - name: run dreal
-        run: $(find /opt/dreal/ -name "dreal" -type f -executable) ./dreal/test/smt2/01.smt2
   ubuntu_22_04_install:
     name: ubuntu 22.04 install
     runs-on: ubuntu-22.04
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup
         run: sudo ./setup/ubuntu/22.04/install.sh
+        shell: bash
+      - name: run dreal
+        run: $(find /opt/dreal/ -name "dreal" -type f -executable) ./dreal/test/smt2/01.smt2
+
+  ubuntu_24_04_install:
+    name: ubuntu 24.04 install
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup
+        run: sudo ./setup/ubuntu/24.04/install.sh
         shell: bash
       - name: run dreal
         run: $(find /opt/dreal/ -name "dreal" -type f -executable) ./dreal/test/smt2/01.smt2
