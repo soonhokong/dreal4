@@ -8,23 +8,23 @@ dReal: An SMT Solver for Nonlinear Theories of Reals
 How to Install
 ==============
 
-macOS 13 / 12 / 11:
+macOS 15:
 
 ```bash
 /usr/bin/curl -fsSL https://raw.githubusercontent.com/dreal/dreal4/master/setup/mac/install.sh | bash
 dreal
 ```
 
-Ubuntu 22.04 / 20.04:
+Ubuntu 24.04 / 22.04:
 
 ```bash
+# 24.04
+sudo apt-get install curl
+curl -fsSL https://raw.githubusercontent.com/dreal/dreal4/master/setup/ubuntu/24.04/install.sh | sudo bash
+
 # 22.04
 sudo apt-get install curl
 curl -fsSL https://raw.githubusercontent.com/dreal/dreal4/master/setup/ubuntu/22.04/install.sh | sudo bash
-
-# 20.04
-sudo apt-get install curl
-curl -fsSL https://raw.githubusercontent.com/dreal/dreal4/master/setup/ubuntu/20.04/install.sh | sudo bash
 
 # Test the installation.
 DREAL_VERSION=4.21.06.2
@@ -75,6 +75,13 @@ y : [8.929064928123818135, 8.929756298502674383]
 z : [0.06815055407334302817, 0.06858905276351445757]
 ```
 
+To enable verbose logging from Python:
+
+```python
+from dreal import *
+set_log_level('debug')  # trace, debug, info, warning, error, critical, off
+```
+
 More examples are available at
 [dreal4/dreal/test/python](https://github.com/dreal/dreal4/tree/master/dreal/test/python).
 
@@ -84,7 +91,7 @@ Docker
 
 We provide a [Docker image of
 dReal4](https://hub.docker.com/r/dreal/dreal4/tags/) which is based on
-Ubuntu 18.04. Try the following to test it:
+Ubuntu 22.04. Try the following to test it:
 
 ```bash
 docker pull dreal/dreal4
@@ -98,14 +105,14 @@ How to Build
 Install Prerequisites
 --------------------
 
-macOS 13 / 12 / 11:
+macOS 15:
 
 ```bash
 git clone https://github.com/dreal/dreal4 && cd dreal4
 ./setup/mac/install_prereqs.sh
 ```
 
-Ubuntu 22.04 / 20.04
+Ubuntu 24.04 / 22.04:
 
 ```bash
 git clone https://github.com/dreal/dreal4 && cd dreal4
@@ -137,20 +144,21 @@ By default, it builds a release build. To build a debug-build, run
 allow lldb/gdb to show symbols.
 
 Bazel uses the system default compiler. To use a specific compiler,
-set up `CC` environment variable. For example, `CC=gcc-7 bazel build
+set up `CC` environment variable. For example, `CC=gcc-14 bazel build
 //...`.
 
 In CI, we test that dReal can be built using the following compilers:
- - Ubuntu:
-   [clang-10](https://releases.llvm.org/10.0.0/tools/clang/docs/),
-   [clang-11](https://releases.llvm.org/11.0.0/tools/clang/docs/),
-   [clang-12](https://releases.llvm.org/12.0.0/tools/clang/docs/),
+ - Ubuntu 22.04:
    [clang-13](https://releases.llvm.org/13.0.0/tools/clang/docs/),
    [clang-14](https://releases.llvm.org/14.0.0/tools/clang/docs/),
-   [gcc-9](https://gcc.gnu.org/gcc-9),
-   [gcc-10](https://gcc.gnu.org/gcc-10),
    [gcc-11](https://gcc.gnu.org/gcc-11),
    [gcc-12](https://gcc.gnu.org/gcc-12)
+ - Ubuntu 24.04:
+   [clang-16](https://releases.llvm.org/16.0.0/tools/clang/docs/),
+   [clang-17](https://releases.llvm.org/17.0.0/tools/clang/docs/),
+   [clang-18](https://releases.llvm.org/18.0.0/tools/clang/docs/),
+   [gcc-13](https://gcc.gnu.org/gcc-13),
+   [gcc-14](https://gcc.gnu.org/gcc-14)
  - macOS: [Apple clang](https://developer.apple.com/library/content/documentation/CompilerTools/Conceptual/LLVMCompilerOverview/index.html)
 
 
@@ -191,13 +199,13 @@ If you want to use
 [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config),
 you need to set up `PKG_CONFIG_PATH` as follows:
 
-macOS 13 / 12 / 11:
+macOS 15:
 
 ```bash
 export PKG_CONFIG_PATH=/usr/local/opt/ibex@2.7.4/share/pkgconfig:${PKG_CONFIG_PATH}
 ```
 
-Ubuntu 22.04 / 20.04:
+Ubuntu 24.04 / 22.04:
 
 ```bash
 export PKG_CONFIG_PATH=/opt/dreal/4.21.06.2/lib/pkgconfig:/opt/libibex/2.7.4/share/pkgconfig:${PKG_CONFIG_PATH}
