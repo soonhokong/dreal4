@@ -1,28 +1,27 @@
-FROM amazonlinux:2
+FROM amazonlinux:2023
 
 RUN mkdir /dreal4
 COPY . /dreal4
 WORKDIR /dreal4
 
 # Install prerequisites.
-RUN yum install -y autoconf automake bison file flex gcc-c++ gcc-gfortran git gmp-devel make patch pkgconfig python3 tar wget which \
+RUN dnf install -y autoconf automake bison file flex gcc-c++ gcc-gfortran git gmp-devel make patch pkgconfig python3 tar wget which \
 # Install COINOR-CLP
     && wget https://raw.githubusercontent.com/coin-or/coinbrew/master/coinbrew \
     && chmod u+x coinbrew \
     && ./coinbrew fetch build --prefix=/usr --tests=none Clp@1.17.7 \
-    && cp /usr/lib/pkgconfig/*.pc /usr/share/pkgconfig/ \
+    && cp /usr/lib64/pkgconfig/*.pc /usr/share/pkgconfig/ \
 # Install IBEX
     && curl https://codeload.github.com/dreal-deps/ibex-lib/tar.gz/352eeeb2345fb2b7a7ec248b44770d8cdc4a5d67 | tar xz \
     && cd ibex-lib-352eeeb2345fb2b7a7ec248b44770d8cdc4a5d67/ \
-    && CXXFLAGS=-std=c++0x ./waf configure --enable-shared --with-optim --with-solver --with-affine-extended --interval-lib=filib --lp-lib=clp --prefix=/opt/libibex/2.7.4 \
+    && ./waf configure --enable-shared --with-optim --with-solver --with-affine-extended --interval-lib=filib --lp-lib=clp --prefix=/opt/libibex/2.7.4 \
     && ./waf install \
     && cd - \
 # Install NLOPT
-    && amazon-linux-extras install epel -y \
-    && yum install NLopt-devel -y \
+    && dnf install -y NLopt-devel \
 # Install Bazel
-    && amazon-linux-extras install -y java-openjdk11 \
-    && wget https://github.com/bazelbuild/bazel/releases/download/8.5.0/bazel-8.5.0-linux-x86_64 -O /usr/bin/bazel \
+    && dnf install -y java-11-openjdk-devel \
+    && wget https://github.com/bazelbuild/bazel/releases/download/8.0.0/bazel-8.0.0-linux-x86_64 -O /usr/bin/bazel \
     && chmod +x /usr/bin/bazel \
 # Build dReal
     && cp /usr/include/FlexLexer.h ./third_party/com_github_westes_flex/FlexLexer.h \
@@ -31,4 +30,4 @@ RUN yum install -y autoconf automake bison file flex gcc-c++ gcc-gfortran git gm
 # Clean up
     && cd / && rm -rf dreal4 \
     && rm -rf /opt/libibex/2.7.4/{bin,include,share} \
-    && yum remove -y autoconf automake bison file flex gcc-c++ gcc-gfortran git java-11-openjdk java-11-openjdk-devel java-11-openjdk-headless make patch pkgconfig python3 tar wget which
+    && dnf remove -y autoconf automake bison file flex gcc-c++ gcc-gfortran git java-11-openjdk-devel make patch pkgconfig python3 tar wget which
