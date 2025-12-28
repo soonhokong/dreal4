@@ -131,10 +131,10 @@ TEST_F(ContractorIbexFwdbwdTest, TestSmt2Problem20Lowlevel) {
   // Double check the arithmetic first.
   EXPECT_EQ(v1 + v2 - v3, 0.0);
 
-  const auto& x = ibex::ExprSymbol::new_();
-  const auto& y = ibex::ExprSymbol::new_();
-  const auto& z = ibex::ExprSymbol::new_();
-  ibex::Function f(x, y, z, x + y - z);
+  const auto* x = &ibex::ExprSymbol::new_();
+  const auto* y = &ibex::ExprSymbol::new_();
+  const auto* z = &ibex::ExprSymbol::new_();
+  ibex::Function f(*x, *y, *z, *x + *y - *z);
   ibex::IntervalVector box(3);
 
   // Note that the use of BloatPoint is necessary here. Otherwise, we have an
