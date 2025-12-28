@@ -1271,6 +1271,21 @@ smt2_test(
 )
 
 smt2_test(
+    name = "define_fun_let_05",
+    size = "small",
+)
+
+smt2_test(
+    name = "define_fun_let_06",
+    size = "small",
+)
+
+smt2_test(
+    name = "define_fun_let_07",
+    size = "small",
+)
+
+smt2_test(
     name = "pow_underflow_01",
     size = "small",
 )

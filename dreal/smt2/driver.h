@@ -188,8 +188,8 @@ class Smt2Driver {
   Context context_;
 
  public:
-  /// Pending let bindings to be applied by substitution.
-  std::vector<std::pair<Variable, Term>> pending_let_bindings_;
+  /// Stack of let binding lists (one per nested let scope).
+  std::vector<std::vector<std::pair<Variable, Term>>> let_bindings_stack_;
 };
 
 }  // namespace dreal

@@ -373,12 +373,12 @@ term:           TK_TRUE { $$ = Formula::True(); }
 	    }
         }
         |       '(' TK_LET enter_scope let_binding_list term exit_scope ')' {
-            // Apply let bindings by substitution
+            // Apply this scope's let bindings by substitution
             Term result = $5;
-            for (const auto& binding : driver.pending_let_bindings_) {
+            for (const auto& binding : driver.let_bindings_stack_.back()) {
                 result = result.Substitute(binding.first, binding.second);
             }
-            driver.pending_let_bindings_.clear();
+            driver.let_bindings_stack_.pop_back();
             $$ = result;
         }
         |       DOUBLE {
@@ -494,15 +494,15 @@ term:           TK_TRUE { $$ = Formula::True(); }
        ;
 
 let_binding_list: '(' var_binding_list ')' {
-            // Store bindings for substitution instead of asserting constraints.
-            // This allows let to work correctly inside define-fun.
+            // Push a new scope for this let's bindings
+            driver.let_bindings_stack_.emplace_back();
             for (auto& binding : $2) {
                 const std::string& name{ binding.first };
                 const Term& term{ binding.second };
                 const bool is_formula = term.type() == Term::Type::FORMULA;
                 const Sort sort = is_formula ? Sort::Bool : Sort::Real;
                 const Variable v{ driver.DeclareLocalVariable(name, sort) };
-                driver.pending_let_bindings_.push_back({v, term});
+                driver.let_bindings_stack_.back().push_back({v, term});
             }
         }
         ;
