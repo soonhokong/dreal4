@@ -21,6 +21,7 @@
 #include <fmt/ostream.h>
 
 #include "dreal/util/assert.h"
+#include "dreal/util/dynamic_bitset.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
@@ -178,7 +179,7 @@ set<Formula> ContractorStatus::Explanation() const {
 ContractorStatus& ContractorStatus::InplaceJoin(
     const ContractorStatus& contractor_status) {
   box_.InplaceUnion(contractor_status.box());
-  output_ |= contractor_status.output();
+  BitsetOrAssign(output_, contractor_status.output());
   unsat_witness_.insert(contractor_status.unsat_witness_.begin(),
                         contractor_status.unsat_witness_.end());
   used_constraints_.insert(contractor_status.used_constraints_.begin(),

@@ -18,6 +18,7 @@
 #include <utility>
 
 #include "dreal/util/assert.h"
+#include "dreal/util/dynamic_bitset.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/interrupt.h"
 #include "dreal/util/logging.h"
@@ -38,7 +39,7 @@ ContractorFixpoint::ContractorFixpoint(TerminationCondition term_cond,
   DREAL_ASSERT(!contractors_.empty());
   DynamicBitset& input{mutable_input()};
   for (const Contractor& c : contractors_) {
-    input |= c.input();
+    BitsetOrAssign(input, c.input());
     if (c.include_forall()) {
       set_include_forall();
     }

@@ -976,7 +976,13 @@ ExpressionMulFactory& ExpressionMulFactory::AddExpression(const Expression& e) {
     return Add(to_multiplication(e));
   }
   if (is_pow(e)) {
-    return AddTerm(get_first_argument(e), get_second_argument(e));
+    const Expression& base{get_first_argument(e)};
+    const Expression& exponent{get_second_argument(e)};
+    if (is_constant(base) && is_constant(exponent)) {
+      // Don't flatten pow with constant base and exponent - keep it as e^1
+      return AddTerm(e, Expression{1.0});
+    }
+    return AddTerm(base, exponent);
   }
   // Add e^1
   return AddTerm(e, Expression{1.0});
@@ -1045,7 +1051,10 @@ ExpressionMulFactory& ExpressionMulFactory::AddTerm(
         //
         // Example: (x^2)^3 => x^(2 * 3)
         const Expression& e1{get_first_argument(base)};
-        return AddTerm(e1, e2 * exponent);
+        // Don't flatten if e1 is also constant (would violate assertion)
+        if (!is_constant(e1)) {
+          return AddTerm(e1, e2 * exponent);
+        }
       }
     }
   }

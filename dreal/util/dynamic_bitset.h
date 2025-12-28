@@ -20,4 +20,18 @@
 namespace dreal {
 using DynamicBitset = sul::dynamic_bitset<size_t>;
 
+/// Performs lhs |= rhs, resizing lhs if necessary to match rhs size.
+inline void BitsetOrAssign(DynamicBitset& lhs, const DynamicBitset& rhs) {
+  if (lhs.size() < rhs.size()) {
+    lhs.resize(rhs.size());
+  }
+  if (rhs.size() < lhs.size()) {
+    DynamicBitset rhs_resized(rhs);
+    rhs_resized.resize(lhs.size());
+    lhs |= rhs_resized;
+  } else {
+    lhs |= rhs;
+  }
+}
+
 }  // namespace dreal

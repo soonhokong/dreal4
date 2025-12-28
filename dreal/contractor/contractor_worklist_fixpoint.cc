@@ -20,6 +20,7 @@
 #include <utility>
 
 #include "dreal/util/assert.h"
+#include "dreal/util/dynamic_bitset.h"
 #include "dreal/util/logging.h"
 
 using std::ostream;
@@ -34,7 +35,9 @@ void UpdateWorklist(const DynamicBitset& output,
                     DynamicBitset* const worklist) {
   DynamicBitset::size_type i_bit = output.find_first();
   while (i_bit != DynamicBitset::npos) {
-    *worklist |= input_to_contractors[i_bit];
+    if (i_bit < input_to_contractors.size()) {
+      *worklist |= input_to_contractors[i_bit];
+    }
     i_bit = output.find_next(i_bit);
   }
 }
@@ -53,7 +56,7 @@ ContractorWorklistFixpoint::ContractorWorklistFixpoint(
   // Setup the input member.
   DynamicBitset& input{mutable_input()};
   for (const Contractor& ctc : contractors_) {
-    input |= ctc.input();
+    BitsetOrAssign(input, ctc.input());
     if (ctc.include_forall()) {
       set_include_forall();
     }

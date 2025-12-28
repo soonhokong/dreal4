@@ -18,6 +18,7 @@
 #include <utility>
 
 #include "dreal/util/assert.h"
+#include "dreal/util/dynamic_bitset.h"
 
 using std::ostream;
 using std::vector;
@@ -33,7 +34,7 @@ ContractorSeq::ContractorSeq(vector<Contractor> contractors,
   DREAL_ASSERT(!contractors_.empty());
   DynamicBitset& input{mutable_input()};
   for (const Contractor& c : contractors_) {
-    input |= c.input();
+    BitsetOrAssign(input, c.input());
     if (c.include_forall()) {
       set_include_forall();
     }
