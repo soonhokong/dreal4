@@ -15,12 +15,12 @@
 */
 #include "dreal/solver/config.h"
 
-#include <fmt/format.h>
 #include <fmt/ostream.h>
 
 #include "dreal/util/exception.h"
+#include "dreal/util/fmt.h"
 
-// Formatter for SatDefaultPhase enum
+// SatDefaultPhase needs full definition from config.h
 template <>
 struct fmt::formatter<dreal::Config::SatDefaultPhase>
     : fmt::ostream_formatter {};

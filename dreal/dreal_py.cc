@@ -20,7 +20,6 @@
 
 #include "./ibex.h"
 #include "fmt/format.h"
-#include "fmt/ostream.h"
 #include "pybind11/functional.h"
 #include "pybind11/operators.h"
 #include "pybind11/pybind11.h"
@@ -36,25 +35,12 @@
 #include "dreal/symbolic/symbolic.h"
 #include "dreal/util/box.h"
 #include "dreal/util/dynamic_bitset.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/if_then_else_eliminator.h"
 #include "dreal/util/interrupt.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/optional.h"
 #include "dreal/util/signal_handler_guard.h"
-
-template <>
-struct fmt::formatter<ibex::Interval> : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Variables>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::Config> : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::DynamicBitset> : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::Contractor> : fmt::ostream_formatter {};
 
 #if defined __clang__
 #if __has_warning("-Wself-assign-overloaded")

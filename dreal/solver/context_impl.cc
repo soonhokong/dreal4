@@ -24,25 +24,12 @@
 #include <unordered_set>
 #include <utility>
 
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-
 #include "dreal/solver/filter_assertion.h"
 #include "dreal/solver/context.h"
 #include "dreal/symbolic/symbolic.h"
-
-template <>
-struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Formula>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Variable>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::Logic> : fmt::ostream_formatter {};
 #include "dreal/util/assert.h"
 #include "dreal/util/exception.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/if_then_else_eliminator.h"
 #include "dreal/util/interrupt.h"
 #include "dreal/util/logging.h"

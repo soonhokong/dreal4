@@ -22,17 +22,17 @@
 #include <string>
 #include <utility>
 
-#include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <gmpxx.h>
 
 #include "dreal/smt2/scanner.h"
 #include "dreal/solver/expression_evaluator.h"
 #include "dreal/symbolic/prefix_printer.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/optional.h"
 #include "dreal/util/precision_guard.h"
 
-// Formatter for GMP types
+// GMP types need full definition from gmpxx.h
 template <typename T, typename U>
 struct fmt::formatter<__gmp_expr<T, U>> : fmt::ostream_formatter {};
 

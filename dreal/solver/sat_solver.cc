@@ -22,18 +22,14 @@
 
 #include "dreal/util/assert.h"
 #include "dreal/util/exception.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
 
+// SatDefaultPhase needs full definition from sat_solver.h -> config.h
 template <>
 struct fmt::formatter<dreal::Config::SatDefaultPhase>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Formula>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Variable>
     : fmt::ostream_formatter {};
 
 namespace dreal {

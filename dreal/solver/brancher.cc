@@ -15,16 +15,9 @@
 */
 #include "dreal/solver/brancher.h"
 
-#include <fmt/ostream.h>
-
 #include "dreal/util/assert.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/logging.h"
-
-template <>
-struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Variable>
-    : fmt::ostream_formatter {};
 
 namespace dreal {
 

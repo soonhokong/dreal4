@@ -28,11 +28,10 @@
 #include "dreal/solver/context.h"
 #include "dreal/util/exception.h"
 #include "dreal/util/filesystem.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/logging.h"
 
-// fmt formatters (required for fmt 12.x)
-template <>
-struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
+// SatDefaultPhase needs full definition from config.h
 template <>
 struct fmt::formatter<dreal::Config::SatDefaultPhase>
     : fmt::ostream_formatter {};

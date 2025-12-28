@@ -28,6 +28,8 @@ dreal_cc_library(
         ":brancher",
         "//dreal/util:box",
         "//dreal/util:dynamic_bitset",
+        "//dreal/util:exception",
+        "//dreal/util:fmt",
         "//dreal/util:option_value",
     ],
 )
@@ -44,6 +46,7 @@ dreal_cc_library(
         "//dreal/util:assert",
         "//dreal/util:box",
         "//dreal/util:dynamic_bitset",
+        "//dreal/util:fmt",
         "//dreal/util:logging",
     ],
 )
@@ -116,6 +119,7 @@ dreal_cc_library(
         "//dreal/util:cds",
         "//dreal/util:dynamic_bitset",
         "//dreal/util:exception",
+        "//dreal/util:fmt",
         "//dreal/util:ibex_converter",
         "//dreal/util:if_then_else_eliminator",
         "//dreal/util:interrupt",
@@ -144,6 +148,7 @@ dreal_cc_library(
         "//dreal/symbolic",
         "//dreal/util:assert",
         "//dreal/util:exception",
+        "//dreal/util:fmt",
         "//dreal/util:logging",
         "//dreal/util:optional",
         "//dreal/util:predicate_abstractor",

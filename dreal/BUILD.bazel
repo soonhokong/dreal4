@@ -45,6 +45,7 @@ dreal_cc_binary(
         "//dreal/smt2",
         "//dreal/solver:config",
         "//dreal/util:filesystem",
+        "//dreal/util:fmt",
         "//dreal/util:logging",
         "@ezoptionparser",
         "@fmt",
@@ -56,6 +57,9 @@ dreal_cc_binary(
 # ----------------------
 dreal_pybind_library(
     name = "dreal_py",
+    cc_deps = [
+        "//dreal/util:fmt",
+    ],
     cc_srcs = ["dreal_py.cc"],
     py_srcs = ["__init__.py"],
 )

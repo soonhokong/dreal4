@@ -13,6 +13,22 @@ package(default_visibility = ["//visibility:private"])
 # Libraries
 # ---------
 dreal_cc_library(
+    name = "fmt",
+    hdrs = [
+        "fmt.h",
+    ],
+    visibility = [
+        "//:__pkg__",
+        "//dreal:__subpackages__",
+    ],
+    deps = [
+        ":dynamic_bitset",
+        "//dreal/smt2:logic",
+        "@fmt",
+    ],
+)
+
+dreal_cc_library(
     name = "assert",
     hdrs = [
         "assert.h",
@@ -35,6 +51,7 @@ dreal_cc_library(
     deps = [
         ":assert",
         ":exception",
+        ":fmt",
         ":logging",
         ":math",
         ":precision_guard",
@@ -233,6 +250,7 @@ dreal_cc_library(
     deps = [
         ":box",
         ":exception",
+        ":fmt",
         ":interval",
         ":logging",
         ":math",

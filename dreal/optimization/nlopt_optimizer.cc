@@ -18,23 +18,10 @@
 #include <cmath>
 #include <utility>
 
-#include <fmt/ostream.h>
-
 #include "dreal/util/assert.h"
 #include "dreal/util/exception.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/logging.h"
-
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Variable>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Expression>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Formula>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
 
 namespace dreal {
 

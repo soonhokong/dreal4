@@ -18,20 +18,12 @@
 #include <atomic>
 #include <utility>
 
-#include <fmt/ostream.h>
-
 #include "dreal/util/assert.h"
 #include "dreal/util/dynamic_bitset.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
-
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Variable>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Formula>
-    : fmt::ostream_formatter {};
 
 using std::set;
 using std::vector;

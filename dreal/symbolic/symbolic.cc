@@ -21,18 +21,8 @@
 
 #include "dreal/util/assert.h"
 #include "dreal/util/exception.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/logging.h"
-
-// fmt formatters for symbolic types (required for fmt 12.x)
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Variable>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Expression>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Formula>
-    : fmt::ostream_formatter {};
 
 namespace dreal {
 

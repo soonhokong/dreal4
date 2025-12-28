@@ -41,6 +41,7 @@ dreal_cc_library(
     deps = [
         "//dreal/util:assert",
         "//dreal/util:exception",
+        "//dreal/util:fmt",
         "//dreal/util:logging",
         "//third_party/com_github_robotlocomotion_drake:drake_symbolic",
     ],

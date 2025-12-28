@@ -21,7 +21,6 @@
 #include <memory>
 #include <utility>
 
-#include <fmt/ostream.h>
 #include <nlohmann/json.hpp>
 
 #include "dreal/contractor/contractor_forall.h"
@@ -31,17 +30,10 @@
 #include "dreal/solver/icp_parallel.h"
 #include "dreal/solver/icp_seq.h"
 #include "dreal/util/assert.h"
+#include "dreal/util/fmt.h"
 #include "dreal/util/logging.h"
 #include "dreal/util/stat.h"
 #include "dreal/util/timer.h"
-
-template <>
-struct fmt::formatter<dreal::Box> : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::drake::symbolic::Formula>
-    : fmt::ostream_formatter {};
-template <>
-struct fmt::formatter<dreal::Contractor> : fmt::ostream_formatter {};
 
 namespace dreal {
 
