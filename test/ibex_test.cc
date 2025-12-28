@@ -30,8 +30,10 @@ int main() {
 
     // We do the following to avoid memory leak. See
     // https://github.com/ibex-team/ibex-lib/issues/137#issuecomment-104536311
-    const auto& x = ibex::ExprSymbol::new_();
-    const auto& y = ibex::ExprSymbol::new_();
+    const ibex::ExprSymbol* const px = &ibex::ExprSymbol::new_();
+    const ibex::ExprSymbol* const py = &ibex::ExprSymbol::new_();
+    const ibex::ExprSymbol& x = *px;
+    const ibex::ExprSymbol& y = *py;
     const double d = 0.5 * sqrt(2);
     ibex::Function f(
         x, y,
@@ -63,8 +65,10 @@ int main() {
     // > Create the Newton iteration contractor
     // > Contract the box x'
     // ------------------------------------------------
-    const auto& x = ibex::ExprSymbol::new_();
-    const auto& y = ibex::ExprSymbol::new_();
+    const ibex::ExprSymbol* const px = &ibex::ExprSymbol::new_();
+    const ibex::ExprSymbol* const py = &ibex::ExprSymbol::new_();
+    const ibex::ExprSymbol& x = *px;
+    const ibex::ExprSymbol& y = *py;
     const double d = 1.0;
     ibex::Function f(x, y,
                      ibex::Return(sqrt(sqr(x) + sqr(y)) - d,
