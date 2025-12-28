@@ -21,9 +21,9 @@ display_usage() {
     echo "usage: $0 <GITHUB_TOKEN>"
 }
 
-if [ "$(lsb_release -r -s)" != "18.04" ]
+if [ "$(lsb_release -r -s)" != "22.04" ]
 then
-    echo "Please run this script on Ubuntu 18.04"
+    echo "Please run this script on Ubuntu 22.04"
     exit 1
 fi
 

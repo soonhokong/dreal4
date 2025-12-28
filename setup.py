@@ -126,7 +126,7 @@ macOS 13 / 12 / 11
     brew tap dreal/dreal
     brew install dreal --only-dependencies
 
-Ubuntu 22.04 / 20.04
+Ubuntu 24.04 / 22.04
 
     curl -fsSL https://raw.githubusercontent.com/dreal/dreal4/master/setup/ubuntu/`lsb_release -r -s`/install.sh | sudo bash
 
@@ -145,7 +145,7 @@ macOS 13 / 12 / 11
     brew tap dreal/dreal
     brew install dreal --only-dependencies --build-from-source
 
-Ubuntu 22.04 / 20.04
+Ubuntu 24.04 / 22.04
 
     curl -fsSL https://raw.githubusercontent.com/dreal/dreal4/master/setup/ubuntu/`lsb_release -r -s`/install_prereqs.sh | sudo bash
 
