@@ -21,10 +21,9 @@ RUN yum install -y autoconf automake bison file flex gcc-c++ gcc-gfortran git gm
     && amazon-linux-extras install epel -y \
     && yum install NLopt-devel -y \
 # Install Bazel
-    && wget https://copr.fedorainfracloud.org/coprs/vbatts/bazel/repo/epel-8/vbatts-bazel-epel-8.repo \
-    && mv vbatts-bazel-epel-8.repo /etc/yum.repos.d/ \
     && amazon-linux-extras install -y java-openjdk11 \
-    && yum install bazel5 -y \
+    && wget https://github.com/bazelbuild/bazel/releases/download/8.5.0/bazel-8.5.0-linux-x86_64 -O /usr/bin/bazel \
+    && chmod +x /usr/bin/bazel \
 # Build dReal
     && cp /usr/include/FlexLexer.h ./third_party/com_github_westes_flex/FlexLexer.h \
     && bazel build //dreal:dreal \
@@ -32,5 +31,4 @@ RUN yum install -y autoconf automake bison file flex gcc-c++ gcc-gfortran git gm
 # Clean up
     && cd / && rm -rf dreal4 \
     && rm -rf /opt/libibex/2.7.4/{bin,include,share} \
-    && rm -rf /etc/yum.repos.d/vbatts-bazel-epel-8.repo \
-    && yum remove -y autoconf automake bazel5 bison file flex gcc-c++ gcc-gfortran git java-11-openjdk java-11-openjdk-devel java-11-openjdk-headless make patch pkgconfig python3 tar wget which
+    && yum remove -y autoconf automake bison file flex gcc-c++ gcc-gfortran git java-11-openjdk java-11-openjdk-devel java-11-openjdk-headless make patch pkgconfig python3 tar wget which
