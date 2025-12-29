@@ -72,7 +72,7 @@ void Box::Add(const Variable& v) {
                        [&v](const Variable& var) { return v.equal_to(var); }) ==
                variables_->end());
 
-  if (!variables_.unique()) {
+  if (variables_.use_count() != 1) {
     // If the components of this box is shared by more than one
     // entity, we need to clone this before adding the variable `v`
     // so that these changes remain local.
