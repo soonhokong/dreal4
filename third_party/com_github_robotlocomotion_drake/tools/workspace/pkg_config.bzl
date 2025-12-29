@@ -97,6 +97,12 @@ def setup_pkg_config_repository(repository_ctx):
             linkopts[i] = "-undefined dynamic_lookup"
             continue
 
+        # On macOS, -lm is not needed (math is part of libSystem).
+        # Remove it to avoid duplicate library warnings.
+        if os_name == "mac os x" and linkopt == "-lm":
+            linkopts[i] = ""
+            continue
+
         # On Linux, skip "-lpython..."
         if os_name == "linux" and linkopt.startswith("-lpython"):
             linkopts[i] = ""
