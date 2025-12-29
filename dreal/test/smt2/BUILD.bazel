@@ -1251,6 +1251,31 @@ smt2_test(
 )
 
 smt2_test(
+    name = "neg_literal_01",
+    size = "small",
+)
+
+smt2_test(
+    name = "neg_literal_02",
+    size = "small",
+)
+
+smt2_test(
+    name = "neg_literal_03",
+    size = "small",
+)
+
+smt2_test(
+    name = "neg_literal_04",
+    size = "small",
+)
+
+smt2_test(
+    name = "neg_literal_05",
+    size = "small",
+)
+
+smt2_test(
     name = "define_fun_let_01",
     size = "small",
 )
