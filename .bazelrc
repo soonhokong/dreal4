@@ -9,8 +9,8 @@ build --extra_toolchains=@dreal//third_party/com_github_google_kythe/tools/build
 # Test settings
 test --test_output=errors
 
-# Use WORKSPACE (Bzlmod migration pending)
-common --noenable_bzlmod --enable_workspace --incompatible_disallow_empty_glob=false
+# Enable Bzlmod (modern module system)
+common --enable_bzlmod
 
 # Python: disable auto __init__.py to prevent source truncation
 build --incompatible_default_to_explicit_init_py

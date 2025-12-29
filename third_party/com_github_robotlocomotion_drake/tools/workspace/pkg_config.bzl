@@ -153,7 +153,7 @@ def setup_pkg_config_repository(repository_ctx):
             repository_ctx.path(item),
             hdrs_path.get_child(symlink_dest))
         includes += ["include/" + symlink_dest]
-    hdrs_prologue = "glob([\"include/**\"]) + "
+    hdrs_prologue = "glob([\"include/**\"], allow_empty = True) + "
 
     # Write out the BUILD file.
     substitutions = {

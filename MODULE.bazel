@@ -1,11 +1,117 @@
-###############################################################################
-# Bazel now uses Bzlmod by default to manage external dependencies.
-# Please consider migrating your external dependencies from WORKSPACE to MODULE.bazel.
-#
-# For more details, please check https://github.com/bazelbuild/bazel/issues/18958
-###############################################################################
-
 module(
     name = "dreal",
     version = "4.21.06.2",
 )
+
+bazel_dep(name = "bazel_skylib", version = "1.9.0")
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_python", version = "1.7.0")
+bazel_dep(name = "rules_license", version = "1.0.0")
+bazel_dep(name = "rules_pkg", version = "1.2.0")
+bazel_dep(name = "googletest", version = "1.17.0", repo_name = "com_google_googletest")
+bazel_dep(name = "abseil-cpp", version = "20250814.1", repo_name = "com_google_absl")
+
+# External dependencies
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+# Third-party dependencies
+http_archive(
+    name = "google_styleguide",
+    build_file = "//tools:google_styleguide.BUILD.bazel",
+    sha256 = "fc6d0cd40f934b58e8e0bb5eb5f1f2b651880b5fbc0e93a54e6fb6503f733b3d",
+    strip_prefix = "cpplint-2.0.2",
+    url = "https://github.com/cpplint/cpplint/archive/refs/tags/2.0.2.tar.gz",
+)
+
+http_archive(
+    name = "pycodestyle",
+    build_file = "//tools:pycodestyle.BUILD.bazel",
+    sha256 = "ffcf4dc55f1e5fbdc6dd6acf5db0fd07ded534ae376eee23a742e1410b48d9ae",
+    strip_prefix = "pycodestyle-2.14.0",
+    url = "https://github.com/PyCQA/pycodestyle/archive/refs/tags/2.14.0.tar.gz",
+)
+
+git_repository(
+    name = "ezoptionparser",
+    build_file = "//tools:ezoptionparser.BUILD.bazel",
+    commit = "5bb9214fc26bf14cea071411216e23799cabd0da",
+    remote = "https://github.com/dreal-deps/ezoptionparser.git",
+)
+
+git_repository(
+    name = "spdlog",
+    build_file = "//tools:spdlog.BUILD.bazel",
+    commit = "486b55554f11c9cccc913e11a87085b2a91f706f",
+    remote = "https://github.com/gabime/spdlog.git",
+)
+
+git_repository(
+    name = "fmt",
+    build_file = "//tools:fmt.BUILD.bazel",
+    commit = "e424e3f2e607da02742f73db84873b8084fc714c",
+    remote = "https://github.com/fmtlib/fmt.git",
+)
+
+git_repository(
+    name = "picosat",
+    build_file = "//tools:picosat.BUILD.bazel",
+    commit = "7670e793684592564d3992dbcb3dcae20f2bd95d",
+    remote = "https://github.com/dreal-deps/picosat.git",
+)
+
+git_repository(
+    name = "pybind11",
+    build_file = "//tools:pybind11.BUILD.bazel",
+    commit = "f5fbe867d2d26e4a0a9177a51f6e568868ad3dc8",
+    remote = "https://github.com/pybind/pybind11.git",
+)
+
+git_repository(
+    name = "cds",
+    build_file = "//tools:cds.BUILD.bazel",
+    commit = "44c052bdb69aaf26d7010074547356c80e55421a",
+    remote = "https://github.com/khizmax/libcds.git",
+)
+
+git_repository(
+    name = "json",
+    build_file = "//tools:json.BUILD.bazel",
+    commit = "55f93686c01528224f448c19128836e7df245f72",
+    remote = "https://github.com/nlohmann/json.git",
+)
+
+# System dependencies - these need to be loaded after the rule definitions
+pkg_config_repository = use_repo_rule("//third_party/com_github_robotlocomotion_drake:tools/workspace/pkg_config.bzl", "pkg_config_repository")
+gmp_repository = use_repo_rule("//tools:gmp_repository.bzl", "gmp_repository")
+local_config_python = use_repo_rule("//tools:local_config_python.bzl", "local_config_python")
+
+# Configure system dependencies
+pkg_config_repository(
+    name = "ibex",
+    modname = "ibex",
+    build_file_template = "//tools:ibex.BUILD.tpl",
+    pkg_config_paths = [
+        "/usr/local/opt/clp/lib/pkgconfig",
+        "/usr/local/opt/coinutils/lib/pkgconfig", 
+        "/usr/local/opt/ibex@2.7.4/share/pkgconfig",
+        "/opt/homebrew/opt/ibex@2.7.4/share/pkgconfig",
+        "/usr/lib/pkgconfig",
+        "/opt/libibex/2.7.4/share/pkgconfig",
+    ],
+)
+
+pkg_config_repository(
+    name = "nlopt",
+    modname = "nlopt",
+    build_file_template = "//tools:nlopt.BUILD.tpl",
+    pkg_config_paths = [
+        "/usr/local/opt/nlopt/lib/pkgconfig",
+        "/usr/lib/pkgconfig",
+    ],
+)
+
+gmp_repository(name = "gmp")
+local_config_python(name = "local_config_python")
+
+register_toolchains("@local_config_python//:py_toolchain")
