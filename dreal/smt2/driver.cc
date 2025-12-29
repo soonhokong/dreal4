@@ -23,7 +23,16 @@
 #include <utility>
 
 #include <fmt/ostream.h>
+
+// Suppress deprecated literal operator warning from GMP headers
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-literal-operator"
+#endif
 #include <gmpxx.h>
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 #include "dreal/smt2/scanner.h"
 #include "dreal/solver/expression_evaluator.h"
