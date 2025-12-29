@@ -8,12 +8,14 @@ dReal: An SMT Solver for Nonlinear Theories of Reals
 How to Install
 ==============
 
-macOS 15:
+macOS 15 (Intel only):
 
 ```bash
 /usr/bin/curl -fsSL https://raw.githubusercontent.com/dreal/dreal4/master/setup/mac/install.sh | bash
 dreal
 ```
+
+Note: Apple Silicon (ARM) Macs are not currently supported.
 
 Ubuntu 24.04 / 22.04:
 
@@ -151,15 +153,18 @@ In CI, we test that dReal can be built using the following compilers:
  - Ubuntu 22.04:
    [clang-13](https://releases.llvm.org/13.0.0/tools/clang/docs/),
    [clang-14](https://releases.llvm.org/14.0.0/tools/clang/docs/),
+   [clang-15](https://releases.llvm.org/15.0.0/tools/clang/docs/),
+   [gcc-10](https://gcc.gnu.org/gcc-10),
    [gcc-11](https://gcc.gnu.org/gcc-11),
    [gcc-12](https://gcc.gnu.org/gcc-12)
  - Ubuntu 24.04:
    [clang-16](https://releases.llvm.org/16.0.0/tools/clang/docs/),
    [clang-17](https://releases.llvm.org/17.0.0/tools/clang/docs/),
    [clang-18](https://releases.llvm.org/18.0.0/tools/clang/docs/),
+   [gcc-12](https://gcc.gnu.org/gcc-12),
    [gcc-13](https://gcc.gnu.org/gcc-13),
    [gcc-14](https://gcc.gnu.org/gcc-14)
- - macOS: [Apple clang](https://developer.apple.com/library/content/documentation/CompilerTools/Conceptual/LLVMCompilerOverview/index.html)
+ - macOS 15 Sequoia (Intel only): [Apple clang](https://developer.apple.com/library/content/documentation/CompilerTools/Conceptual/LLVMCompilerOverview/index.html)
 
 
 C++ Documentation
