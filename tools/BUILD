@@ -37,12 +37,20 @@ config_setting(
 
 config_setting(
     name = "darwin",
-    values = {"cpu": "darwin"},
+    constraint_values = [
+        "@platforms//os:osx",
+        "@platforms//cpu:x86_64",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 config_setting(
     name = "darwin_arm64",
-    values = {"cpu": "darwin_arm64"},
+    constraint_values = [
+        "@platforms//os:osx",
+        "@platforms//cpu:arm64",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 config_setting(
