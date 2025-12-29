@@ -139,6 +139,10 @@ def dreal_pybind_library(
             "@dreal//tools:linux": [
                 "-Wl,%s" % (_make_search_paths("$$ORIGIN", levels_to_root),),
             ],
+            "@dreal//tools:apple": [
+                "-undefined",
+                "dynamic_lookup",
+            ],
             "@//conditions:default": [],
         }),
         linkshared = 1,
