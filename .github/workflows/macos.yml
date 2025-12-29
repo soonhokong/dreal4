@@ -13,12 +13,14 @@ env:
 
 jobs:
   sequoia_build_and_test:
-    runs-on: macos-15-large
+    runs-on: macos-15-intel
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: setup
-        run: ./setup/mac/install_prereqs.sh
+        run: |
+          brew unlink bazelisk || true
+          ./setup/mac/install_prereqs.sh
       - name: build and test
         run: |
           bazel test //... \
@@ -27,12 +29,14 @@ jobs:
             --verbose_failures
 
   sequoia_ubsan:
-    runs-on: macos-15-large
+    runs-on: macos-15-intel
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: setup
-        run: ./setup/mac/install_prereqs.sh
+        run: |
+          brew unlink bazelisk || true
+          ./setup/mac/install_prereqs.sh
       - name: build and test
         run: |
           bazel test //... \
@@ -43,12 +47,14 @@ jobs:
             --verbose_failures
 
   sequoia_asan:
-    runs-on: macos-15-large
+    runs-on: macos-15-intel
     steps:
       - name: checkout
         uses: actions/checkout@v4
       - name: setup
-        run: ./setup/mac/install_prereqs.sh
+        run: |
+          brew unlink bazelisk || true
+          ./setup/mac/install_prereqs.sh
       - name: build and test
         run: |
           bazel test //... \
