@@ -25,6 +25,7 @@ jobs:
         run: |
           bazel test //... \
             -c dbg \
+            --config macos \
             --test_output=errors \
             --verbose_failures
 
@@ -41,6 +42,7 @@ jobs:
         run: |
           bazel test //... \
             -c dbg \
+            --config macos \
             --test_output=errors \
             --config ubsan \
             --test_tag_filters=-no_ubsan \
@@ -59,6 +61,7 @@ jobs:
         run: |
           bazel test //... \
             -c dbg \
+            --config macos \
             --test_output=errors \
             --config asan \
             --test_tag_filters=-no_asan \

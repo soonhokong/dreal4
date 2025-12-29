@@ -50,3 +50,7 @@ build:ubsan --test_env=UBSAN_OPTIONS --test_tag_filters=-no_ubsan --test_timeout
 build:kcov --copt=-g --copt=-O0
 test:kcov --spawn_strategy=local --run_under=//tools:kcov --local_test_jobs=1
 test:kcov --test_tag_filters=-cpplint,-pycodestyle,-no_kcov --nocache_test_results --test_timeout=120,600,1800,7200
+
+### Platform-specific configs ###
+# macOS: IBEX 2.7.4 uses std::unary_function/binary_function removed in C++17
+build:macos --cxxopt=-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
