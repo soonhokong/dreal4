@@ -129,8 +129,6 @@ pkg_deb(
         "libibex-dev",
         "libnlopt-dev",
         # The followings are Build-Depends:
-        # "bison",
-        # "flex",
         # "pkg-config",
         # "libgmp-dev",
     ],

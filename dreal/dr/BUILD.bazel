@@ -1,52 +1,35 @@
-load("//third_party/com_github_google_kythe/tools/build_rules:lexyacc.bzl", "genlex", "genyacc")
 load("//third_party/com_github_robotlocomotion_drake:tools/workspace/cpplint.bzl", "cpplint")
 load("//tools:dreal.bzl", "dreal_cc_library")
 
 package(default_visibility = ["//visibility:private"])
 
-genyacc(
-    name = "parser",
-    src = "parser.yy",
-    extra_outs = [
-        "location.hh",
-        "position.hh",
-        "stack.hh",
-    ],
-    header_out = "parser.yy.hh",
-    source_out = "parser.yy.cc",
+dreal_cc_library(
+    name = "dr_lexer",
+    srcs = ["dr_lexer.cc"],
+    hdrs = ["dr_lexer.h"],
+    deps = [],
 )
 
-genlex(
-    name = "scanner",
-    src = "scanner.ll",
-    out = "scanner.ll.cc",
-    includes = [":parser"],
+dreal_cc_library(
+    name = "dr_parser",
+    srcs = ["dr_parser.cc"],
+    hdrs = ["dr_parser.h"],
+    deps = [
+        ":dr_lexer",
+        "//dreal/solver",
+        "//dreal/symbolic",
+        "//dreal/util:exception",
+    ],
 )
 
 dreal_cc_library(
     name = "dr",
-    srcs = [
-        "driver.cc",
-        "run.cc",
-        ":parser",
-        ":scanner",
-    ],
-    hdrs = [
-        "driver.h",
-        "run.h",
-        "scanner.h",
-    ],
-    copts = [
-        "-Wno-unused-but-set-variable",
-        "-Wno-unknown-warning-option",
-    ],
+    srcs = ["run.cc"],
+    hdrs = ["run.h"],
     visibility = ["//dreal:__pkg__"],
     deps = [
-        "//dreal/solver",
-        "//dreal/symbolic",
-        "//dreal/util:optional",
-        "//dreal/util:scoped_unordered_map",
-        "//third_party/com_github_westes_flex:flex_lexer_h",
+        ":dr_parser",
+        "//dreal/util:logging",
     ],
 )
 

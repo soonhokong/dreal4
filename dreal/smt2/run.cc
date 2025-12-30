@@ -15,24 +15,38 @@
 */
 #include "dreal/smt2/run.h"
 
-#include "dreal/smt2/driver.h"
+#include <fstream>
+#include <iostream>
+
+#include "dreal/smt2/smt2_parser.h"
 #include "dreal/util/logging.h"
 
 namespace dreal {
 
+using std::cin;
+using std::cout;
+using std::ifstream;
 using std::string;
 
 void RunSmt2(const string& filename, const Config& config,
              const bool debug_scanning, const bool debug_parsing) {
-  Smt2Driver smt2_driver{Context{config}};
-  // Set up --debug-scanning option.
-  smt2_driver.set_trace_scanning(debug_scanning);
-  DREAL_LOG_DEBUG("RunSmt2() --debug-scanning = {}",
-                  smt2_driver.trace_scanning());
-  // Set up --debug-parsing option.
-  smt2_driver.set_trace_parsing(debug_parsing);
-  DREAL_LOG_DEBUG("RunSmt2() --debug-parsing = {}",
-                  smt2_driver.trace_parsing());
-  smt2_driver.parse_file(filename);
+  DREAL_LOG_DEBUG("RunSmt2() filename = {}", filename);
+
+  ifstream input;
+  if (!filename.empty()) {
+    input.open(filename);
+    if (!input.is_open()) {
+      throw std::runtime_error("Cannot open file: " + filename);
+    }
+  }
+
+  Smt2Parser parser(filename.empty() ? &cin : &input, config);
+  parser.set_debug_scanning(debug_scanning);
+  parser.set_debug_parsing(debug_parsing);
+  if (!filename.empty()) {
+    parser.set_filename(filename);
+  }
+  parser.Parse();
 }
+
 }  // namespace dreal

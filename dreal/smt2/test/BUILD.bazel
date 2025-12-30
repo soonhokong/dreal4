@@ -1,0 +1,11 @@
+load("//tools:dreal.bzl", "dreal_cc_googletest")
+
+package(default_visibility = ["//visibility:private"])
+
+dreal_cc_googletest(
+    name = "smt2_parser_test",
+    srcs = ["smt2_parser_test.cc"],
+    deps = [
+        "//dreal/smt2:smt2_parser",
+    ],
+)

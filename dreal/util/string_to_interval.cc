@@ -28,6 +28,8 @@ Box::Interval StringToInterval(const string& s) {
   double lb{};
   if (s[0] == '-') {
     lb = -stod(s.substr(1));
+  } else if (s[0] == '+') {
+    lb = -stod("-" + s.substr(1));
   } else {
     lb = -stod("-" + s);
   }

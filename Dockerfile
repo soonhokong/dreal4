@@ -24,6 +24,6 @@ RUN apt-get update \
       && rm -rf dreal4 \
       && rm -rf /root/.cache/bazel \
       && rm -rf /var/lib/apt/lists/* \
-      && apt-get remove -y bazel bison flex g++ wget \
+      && apt-get remove -y bazel g++ wget \
       && apt-get autoclean -y \
       && apt-get autoremove -y

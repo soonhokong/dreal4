@@ -7,10 +7,8 @@ Install Prerequisites
 ```bash
 yum install -y \
 	NLopt-devel \
-	bison \
 	coin-or-Clp-devel \
 	findutils \
-	flex \
 	g++ \
 	git \
 	gmp-devel \

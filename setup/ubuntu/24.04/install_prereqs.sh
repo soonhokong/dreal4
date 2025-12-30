@@ -27,10 +27,8 @@ apt-get install -y --no-install-recommends software-properties-common || \
 for i in {1..3}; do add-apt-repository ppa:dreal/dreal --no-update -y && break || sleep 10; done  # For libibex-dev
 apt-get update || (sleep 30; apt-get update)
 apt-get install -y --no-install-recommends $(tr '\n' ' ' <<EOF
-bison
 coinor-libclp-dev
 g++
-libfl-dev
 libgmp-dev
 libibex-dev
 libnlopt-cxx-dev
