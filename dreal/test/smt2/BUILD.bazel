@@ -1251,6 +1251,26 @@ smt2_test(
 )
 
 smt2_test(
+    name = "issue324_01",
+    size = "small",
+)
+
+smt2_test(
+    name = "issue324_02",
+    size = "small",
+)
+
+smt2_test(
+    name = "issue324_03",
+    size = "small",
+)
+
+smt2_test(
+    name = "issue324_04",
+    size = "small",
+)
+
+smt2_test(
     name = "neg_literal_01",
     size = "small",
 )
