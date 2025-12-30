@@ -185,7 +185,24 @@ optional<Box> Context::Impl::CheckSatCore(const ScopedVector<Formula>& stack,
               "ContextImpl::CheckSatCore() - size of explanation = {} - stack "
               "size = {}",
               explanation.size(), stack.get_vector().size());
-          sat_solver->AddLearnedClause(explanation);
+          // Build learned clause from theory literals that appear in the
+          // explanation. We match by checking if the formula (or its negation)
+          // is in the explanation.
+          vector<pair<Variable, bool>> literals_in_explanation;
+          for (const auto& p : theory_model) {
+            const Formula& lit = sat_solver->theory_literal(p.first);
+            const Formula lit_used = p.second ? lit : !lit;
+            if (explanation.count(lit_used) > 0) {
+              literals_in_explanation.push_back(p);
+            }
+          }
+          // Also include positive Boolean literals for robustness.
+          for (const auto& p : boolean_model) {
+            if (p.second) {
+              literals_in_explanation.push_back(p);
+            }
+          }
+          sat_solver->AddLearnedClause(literals_in_explanation);
           if (DREAL_LOG_TRACE_ENABLED) {
             for (const auto& f_i : stack.get_vector()) {
               DREAL_LOG_TRACE("ContextImpl::CheckSatCore: Stack {}", f_i);

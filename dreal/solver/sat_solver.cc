@@ -85,6 +85,14 @@ void SatSolver::AddLearnedClause(const set<Formula>& formulas) {
   picosat_add(sat_, 0);
 }
 
+void SatSolver::AddLearnedClause(const vector<Literal>& literals) {
+  for (const auto& p : literals) {
+    const int sat_var = to_sat_var_[p.first.get_id()];
+    picosat_add(sat_, p.second ? -sat_var : sat_var);
+  }
+  picosat_add(sat_, 0);
+}
+
 void SatSolver::AddClauses(const vector<Formula>& formulas) {
   for (const Formula& f : formulas) {
     AddClause(f);
