@@ -21,9 +21,9 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-apt-get install -y --no-install-recommends software-properties-common || \
+apt-get install -y --no-install-recommends software-properties-common gpg || \
     ( (apt-get update || (sleep 30; apt-get update)) && \
-	  apt-get install -y --no-install-recommends software-properties-common)
+	  apt-get install -y --no-install-recommends software-properties-common gpg)
 for i in {1..3}; do add-apt-repository ppa:dreal/dreal --no-update -y && break || sleep 10; done  # For libibex-dev
 apt-get update || (sleep 30; apt-get update)
 apt-get install -y --no-install-recommends $(tr '\n' ' ' <<EOF
