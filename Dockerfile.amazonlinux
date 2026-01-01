@@ -5,7 +5,7 @@ COPY . /dreal4
 WORKDIR /dreal4
 
 # Install prerequisites.
-RUN dnf install -y autoconf automake cmake file gcc-c++ gcc-gfortran git gmp-devel make patch pkgconfig python3 tar wget which \
+RUN dnf install -y autoconf automake bison cmake file flex gcc-c++ gcc-gfortran git gmp-devel make patch pkgconfig python3 tar wget which \
 # Install COINOR-CLP
     && wget https://raw.githubusercontent.com/coin-or/coinbrew/master/coinbrew \
     && chmod u+x coinbrew \
@@ -35,6 +35,6 @@ RUN dnf install -y autoconf automake cmake file gcc-c++ gcc-gfortran git gmp-dev
 # Clean up
     && cd / && rm -rf dreal4 \
     && rm -rf /opt/libibex/2.7.4/{bin,include,share} \
-    && dnf remove -y autoconf automake cmake file gcc-c++ gcc-gfortran git java-11-amazon-corretto-devel make patch pkgconfig tar wget which \
+    && dnf remove -y autoconf automake bison cmake file flex gcc-c++ gcc-gfortran git java-11-amazon-corretto-devel make patch pkgconfig tar wget which \
     && dnf install -y gmp gmp-c++ \
     && dnf clean all
