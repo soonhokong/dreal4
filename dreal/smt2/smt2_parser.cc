@@ -6,7 +6,16 @@
 #include <sstream>
 #include <stdexcept>
 
+#ifdef __clang__
+#pragma clang diagnostic push
+#if __has_warning("-Wdeprecated-literal-operator")
+#pragma clang diagnostic ignored "-Wdeprecated-literal-operator"
+#endif
+#endif
 #include <gmpxx.h>
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 #include "dreal/smt2/logic.h"
 #include "dreal/smt2/term.h"
