@@ -149,6 +149,7 @@ class Smt2Lexer {
   Token ScanNumber();
   Token ScanSymbolOrKeyword();
   Token ScanString();
+  Token ScanHashLiteral();
   Token MakeToken(TokenKind kind);
   Token MakeToken(TokenKind kind, std::int64_t value);
   Token MakeToken(TokenKind kind, double value);

@@ -271,6 +271,46 @@ Token Smt2Lexer::ScanSymbolOrKeyword() {
   return Token{TokenKind::Symbol, start_loc, text};
 }
 
+Token Smt2Lexer::ScanHashLiteral() {
+  SourceLocation start_loc = loc_;
+  Advance();  // consume '#'
+
+  if (AtEnd()) {
+    throw std::runtime_error("Unexpected end after #");
+  }
+
+  char type = Current();
+  Advance();  // consume 'x' or 'b'
+
+  if (type == 'x' || type == 'X') {
+    // Hexadecimal: #xNNN
+    std::string hex_str;
+    while (!AtEnd() && std::isxdigit(Current())) {
+      hex_str += Current();
+      Advance();
+    }
+    if (hex_str.empty()) {
+      throw std::runtime_error("Invalid hexadecimal literal");
+    }
+    std::int64_t val = std::stoll(hex_str, nullptr, 16);
+    return Token{TokenKind::Int, start_loc, val};
+  } else if (type == 'b' || type == 'B') {
+    // Binary: #bNNN
+    std::string bin_str;
+    while (!AtEnd() && (Current() == '0' || Current() == '1')) {
+      bin_str += Current();
+      Advance();
+    }
+    if (bin_str.empty()) {
+      throw std::runtime_error("Invalid binary literal");
+    }
+    std::int64_t val = std::stoll(bin_str, nullptr, 2);
+    return Token{TokenKind::Int, start_loc, val};
+  } else {
+    throw std::runtime_error(std::string("Unknown # literal type: ") + type);
+  }
+}
+
 Token Smt2Lexer::ScanString() {
   SourceLocation start_loc = loc_;
   Advance();  // consume opening '"'
@@ -338,6 +378,11 @@ Token Smt2Lexer::ScanToken() {
   if (std::isdigit(c) ||
       ((c == '+' || c == '-') && std::isdigit(LookAhead()))) {
     return ScanNumber();
+  }
+
+  // Hexadecimal #xNNN or binary #bNNN
+  if (c == '#') {
+    return ScanHashLiteral();
   }
 
   // Keyword (starts with ':')
