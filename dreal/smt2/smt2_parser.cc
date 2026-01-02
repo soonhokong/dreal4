@@ -225,17 +225,17 @@ void Smt2Parser::ParseSetOption() {
       precision = static_cast<double>(val.as_int());
     }
     context_.mutable_config().mutable_precision().set_from_file(precision);
-  } else if (key == ":produce-models") {
+  } else if (key == ":produce-models" || key == ":produce_models") {
     Token val = lexer_.Next();
     if (val.kind == TokenKind::True) {
       context_.mutable_config().mutable_produce_models().set_from_file(true);
     }
-  } else if (key == ":smtlib2_compliant") {
+  } else if (key == ":smtlib2-compliant" || key == ":smtlib2_compliant") {
     Token val = lexer_.Next();
     if (val.kind == TokenKind::True) {
       context_.mutable_config().mutable_smtlib2_compliant().set_from_file(true);
     }
-  } else if (key == ":local-optimization") {
+  } else if (key == ":local-optimization" || key == ":local_optimization") {
     Token val = lexer_.Next();
     if (val.kind == TokenKind::True) {
       context_.mutable_config().mutable_use_local_optimization().set_from_file(
@@ -246,13 +246,13 @@ void Smt2Parser::ParseSetOption() {
     if (val.kind == TokenKind::True) {
       context_.mutable_config().mutable_use_polytope().set_from_file(true);
     }
-  } else if (key == ":forall-polytope") {
+  } else if (key == ":forall-polytope" || key == ":forall_polytope") {
     Token val = lexer_.Next();
     if (val.kind == TokenKind::True) {
       context_.mutable_config().mutable_use_polytope_in_forall().set_from_file(
           true);
     }
-  } else if (key == ":worklist-fixpoint") {
+  } else if (key == ":worklist-fixpoint" || key == ":worklist_fixpoint") {
     Token val = lexer_.Next();
     if (val.kind == TokenKind::True) {
       context_.mutable_config().mutable_use_worklist_fixpoint().set_from_file(

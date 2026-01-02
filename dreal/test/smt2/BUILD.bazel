@@ -638,6 +638,41 @@ smt2_test(
 )
 
 smt2_test(
+    name = "option_local_optimization",
+    size = "small",
+)
+
+smt2_test(
+    name = "option_polytope",
+    size = "small",
+)
+
+smt2_test(
+    name = "option_precision",
+    size = "small",
+)
+
+smt2_test(
+    name = "option_produce_models",
+    size = "small",
+)
+
+smt2_test(
+    name = "option_produce_models_underscore",
+    size = "small",
+)
+
+smt2_test(
+    name = "option_smtlib2_compliant",
+    size = "small",
+)
+
+smt2_test(
+    name = "option_worklist_fixpoint",
+    size = "small",
+)
+
+smt2_test(
     name = "osmosis-backoff",
     size = "small",
 )

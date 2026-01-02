@@ -1,0 +1,11 @@
+; Test polytope option
+(set-logic QF_NRA)
+(set-option :polytope true)
+(declare-fun x () Real)
+(declare-fun y () Real)
+(assert (<= 0 x))
+(assert (<= x 1))
+(assert (<= 0 y))
+(assert (<= y 1))
+(assert (<= (+ x y) 1.5))
+(check-sat)

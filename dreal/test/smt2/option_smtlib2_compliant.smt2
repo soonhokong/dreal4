@@ -1,0 +1,7 @@
+; Test smtlib2-compliant option (hyphen variant)
+(set-logic QF_NRA)
+(set-option :smtlib2-compliant true)
+(declare-fun x () Real)
+(assert (<= 0 x))
+(assert (<= x 1))
+(check-sat)

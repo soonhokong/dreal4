@@ -1,0 +1,7 @@
+(set-logic QF_NRA)
+(set-option :precision 0.01)
+(declare-fun x () Real)
+(assert (<= 0 x))
+(assert (<= x 1))
+(assert (= (* x x) 2))
+(check-sat)
