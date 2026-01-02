@@ -1253,6 +1253,7 @@ smt2_test(
 smt2_test(
     name = "issue324_01",
     size = "small",
+    tags = ["no_asan"],
 )
 
 smt2_test(
@@ -1268,6 +1269,29 @@ smt2_test(
 smt2_test(
     name = "issue324_04",
     size = "small",
+    tags = ["no_asan"],
+)
+
+smt2_test(
+    name = "issue324_05",
+    size = "small",
+    tags = ["no_asan"],
+)
+
+smt2_test(
+    name = "issue324_06",
+    size = "small",
+)
+
+smt2_test(
+    name = "issue324_07",
+    size = "small",
+)
+
+smt2_test(
+    name = "issue324_08",
+    size = "small",
+    tags = ["no_asan"],
 )
 
 smt2_test(

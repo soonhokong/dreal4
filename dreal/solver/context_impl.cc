@@ -224,7 +224,8 @@ optional<Box> Context::Impl::CheckSatCore(const ScopedVector<Formula>& stack,
 }
 
 optional<Box> Context::Impl::CheckSat() {
-  // Update SAT solver settings from config (may have been changed by set-option)
+  // Update SAT solver settings from config (may have been changed by
+  // set-option)
   sat_solver_.SetSatDefaultPhase(config_.sat_default_phase());
   auto result = CheckSatCore(stack_, box(), &sat_solver_);
   if (result) {
