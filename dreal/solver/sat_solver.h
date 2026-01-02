@@ -83,6 +83,9 @@ class SatSolver {
   /// @returns nullopt if UNSAT.
   optional<Model> CheckSat();
 
+  /// Updates the default phase setting for the SAT solver.
+  void SetSatDefaultPhase(Config::SatDefaultPhase phase);
+
   // TODO(soonho): Push/Pop cnfizer and predicate_abstractor?
   void Pop();
 

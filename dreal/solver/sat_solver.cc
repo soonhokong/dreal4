@@ -194,6 +194,11 @@ optional<SatSolver::Model> SatSolver::CheckSat() {
   }
 }
 
+void SatSolver::SetSatDefaultPhase(const Config::SatDefaultPhase phase) {
+  picosat_set_global_default_phase(sat_, static_cast<int>(phase));
+  DREAL_LOG_DEBUG("SatSolver::SetSatDefaultPhase({})", phase);
+}
+
 void SatSolver::Pop() {
   DREAL_LOG_DEBUG("SatSolver::Pop()");
   tseitin_variables_.pop();

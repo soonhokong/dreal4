@@ -258,6 +258,12 @@ void Smt2Parser::ParseSetOption() {
       context_.mutable_config().mutable_use_worklist_fixpoint().set_from_file(
           true);
     }
+  } else if (key == ":sat-default-phase") {
+    Token val = lexer_.Next();
+    if (val.kind == TokenKind::Int) {
+      context_.mutable_config().mutable_sat_default_phase().set_from_file(
+          static_cast<Config::SatDefaultPhase>(val.as_int()));
+    }
   } else {
     // Skip unknown option value
     if (lexer_.Peek().kind != TokenKind::RParen) {
