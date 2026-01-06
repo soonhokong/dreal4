@@ -6,10 +6,14 @@ load(
     "dreal_cc_binary",
     "dreal_cc_library",
     "dreal_pybind_library",
+    "get_pybind_package_info",
 )
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
 
 package(default_visibility = ["//visibility:private"])
+
+# This determines how `PYTHONPATH` is configured for pybind libraries.
+PACKAGE_INFO = get_pybind_package_info()
 
 genrule(
     name = "generate_version_header",
@@ -61,6 +65,7 @@ dreal_pybind_library(
         "//dreal/util:fmt",
     ],
     cc_srcs = ["dreal_py.cc"],
+    package_info = PACKAGE_INFO,
     py_srcs = ["__init__.py"],
 )
 
@@ -68,6 +73,8 @@ dreal_pybind_library(
 dreal_pybind_library(
     name = "odr_test_module_py",
     cc_srcs = ["odr_test_module_py.cc"],
+    package_info = PACKAGE_INFO,
+    testonly = True,
 )
 
 # ----------------------

@@ -79,6 +79,64 @@ def _check_library_deps_blacklist(name, deps):
                  "function from a cc_library; only cc_binary program should " +
                  "have a main function")
 
+def _check_pybind_cc_deps(name, cc_deps, testonly = False):
+    """Fails-fast in case of potential ODR violations in pybind libraries.
+
+    Pybind libraries link against the shared library, so any cc_deps that
+    are also linked into the shared library would cause ODR violations.
+    Only header-only libraries should be allowed as cc_deps.
+    """
+    if not cc_deps:
+        return
+    if type(cc_deps) != "list":
+        return
+
+    # Allowed prefixes for cc_deps (header-only or pybind-specific)
+    allowed_prefixes = [
+        # Local pybind targets
+        ":",
+        # dreal utility headers that are header-only
+        "//dreal/util:fmt",
+    ]
+
+    if testonly:
+        # Test utilities are not part of libdreal.so
+        allowed_prefixes.append("//dreal/test")
+
+    for dep in cc_deps:
+        is_allowed = False
+        for prefix in allowed_prefixes:
+            if dep.startswith(prefix):
+                is_allowed = True
+                break
+        if not is_allowed:
+            fail(("The pybind library '{}' has cc_dep '{}' which may cause " +
+                  "ODR violations. Only header-only libraries should be in " +
+                  "cc_deps. Other dependencies should come through the " +
+                  "shared library.").format(name, dep))
+
+def get_pybind_package_info(base_package = "//dreal"):
+    """Returns a struct with Python package path information.
+
+    This provides consistent PYTHONPATH configuration and installation paths
+    for pybind libraries.
+
+    Args:
+        base_package: The base package for Python bindings (default "//dreal")
+
+    Returns:
+        A struct with:
+            py_imports: List of import paths for PYTHONPATH
+            py_dest: Installation destination for Python files
+            base_package: The base package path
+    """
+    # Calculate the relative path from the current package to the base
+    return struct(
+        py_imports = ["."],
+        py_dest = PYTHON_PACKAGE_DIR,
+        base_package = base_package,
+    )
+
 def dreal_cc_library(
         name,
         hdrs = None,
@@ -114,16 +172,44 @@ def dreal_pybind_library(
         name,
         py_srcs = [],
         py_deps = [],
+        py_imports = [],
         cc_srcs = [],
-        cc_deps = []):
+        cc_deps = [],
+        package_info = None,
+        testonly = False,
+        visibility = None):
     """Creates a rule to declare a pybind library.
 
-    Note that `cc_deps` should includes header-only dependencies.
+    Args:
+        name: The name of the library.
+        py_srcs: Python source files.
+        py_deps: Python dependencies.
+        py_imports: Additional Python import paths.
+        cc_srcs: C++ source files for the pybind module.
+        cc_deps: C++ dependencies. These should be header-only libraries
+            to avoid ODR violations with the shared library.
+        package_info: Optional result of get_pybind_package_info() for
+            consistent path configuration.
+        testonly: If True, relaxes ODR checks for test utilities.
+        visibility: Visibility specification.
     """
+    # Check for potential ODR violations
+    _check_pybind_cc_deps(name, cc_deps, testonly)
+
     cc_so_name = "_" + name + ".so"
 
     # The last +3 is for "lib/python*/site-packages".
     levels_to_root = native.package_name().count("/") + name.count("/") + 3
+
+    # Determine imports from package_info or use defaults
+    all_py_imports = py_imports
+    if package_info:
+        all_py_imports = package_info.py_imports + py_imports
+
+    # Default visibility
+    if visibility == None:
+        visibility = ["//dreal:__subpackages__"]
+
     dreal_cc_binary(
         name = cc_so_name,
         srcs = cc_srcs,
@@ -146,6 +232,7 @@ def dreal_pybind_library(
             "@//conditions:default": [],
         }),
         linkshared = 1,
+        testonly = testonly,
         deps = cc_deps + [
             "//:dreal_shared_library",
             "@pybind11",
@@ -158,7 +245,9 @@ def dreal_pybind_library(
             cc_so_name,
         ],
         srcs_version = "PY3",
-        visibility = ["//dreal:__subpackages__"],
+        imports = all_py_imports,
+        visibility = visibility,
+        testonly = testonly,
         deps = py_deps,
     )
 
