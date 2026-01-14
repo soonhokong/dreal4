@@ -27,7 +27,7 @@ RUN dnf install -y autoconf automake bison cmake file flex gcc-c++ gcc-gfortran 
     && cd - \
 # Install Bazel
     && dnf install -y java-11-amazon-corretto-devel \
-    && wget https://github.com/bazelbuild/bazel/releases/download/8.0.0/bazel-8.0.0-linux-x86_64 -O /usr/bin/bazel \
+    && wget https://github.com/bazelbuild/bazel/releases/download/8.5.1/bazel-8.5.1-linux-x86_64 -O /usr/bin/bazel \
     && chmod +x /usr/bin/bazel \
 # Build dReal
     && bazel build //dreal:dreal \

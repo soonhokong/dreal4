@@ -23,4 +23,7 @@ fi
 
 brew tap robotlocomotion/director
 brew tap dreal/dreal
+brew unlink bazelisk || true
 brew install dreal --only-dependencies --build-from-source
+brew unlink bazel || true
+brew link bazelisk || brew install bazelisk
